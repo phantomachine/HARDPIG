@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7. Approximating SSE operators &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="8. Bilinear programs and SSE operator" href="payoff_bilinear.html" />
+    <link rel="prev" title="6. Equilibrium Payoff Correspondence" href="payoff_approximation.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="payoff_bilinear.html" title="8. Bilinear programs and SSE operator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="payoff_approximation.html" title="6. Equilibrium Payoff Correspondence"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="approximating-sse-operators">
+<h1>7. Approximating SSE operators<a class="headerlink" href="#approximating-sse-operators" title="Permalink to this headline">¶</a></h1>
+<p>The goal ahead is to <em>approximate</em> and provide computable representations of:</p>
+<ul class="simple">
+<li>each candidate correspondence <img class="math" src="_images/math/36df3b6ef1e31c152e276beb53ca9c66af90c665.png" alt="\mathcal{W}: D \rightrightarrows
+\mathbb{R}^{\mathcal{Z}}"/>; and</li>
+<li>the operator <img class="math" src="_images/math/eeb2713e3ffbb8f304f5ee8fb6f410ce7a46be16.png" alt="\mathcal{W} \mapsto \mathbf{B}(\mathcal{W})"/>.</li>
+</ul>
+<div class="section" id="conceptual">
+<h2>7.1. Conceptual<a class="headerlink" href="#conceptual" title="Permalink to this headline">¶</a></h2>
+<p>Recall <img class="math" src="_images/math/034194808ddab05ea1e3c6ee394ef8fea676050e.png" alt="\{Q_k\,|\,k=1,\ldots ,K\}"/> denotes a partition of <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>, so
+<img class="math" src="_images/math/0b7f3245c2dc08bb78e268bd3c764d7ecded30d7.png" alt="D=\bigcup_{k=1}^K Q_k"/>. An upper hemicontinuous, compact- and
+convex-valued correspondence <img class="math" src="_images/math/71798271222362253b0b1973ba925fbad1753015.png" alt="\mathcal{W}:D \rightrightarrows
+\mathbb{R}^\mathcal{Z}"/> can be approximated by step-valued correspondences using the following procedures: Letting</p>
+<div class="math">
+<p><img src="_images/math/bfef33f4b5b1c1cb357b2585995caa332298fd18.png" alt="\begin{equation*}
+        \omega^o_k (\lambda) :=
+        \begin{cases}
+        \text{co}\bigcup_{\lambda \in Q_k}\mathcal{W}(\lambda') &amp; \text{if} \ (\lambda) \in Q_k,\\
+        \emptyset &amp; \text{otherwise},
+        \end{cases}
+    \end{equation*}"/></p>
+</div><p>the correspondence defined by <img class="math" src="_images/math/b9e01248273997344d6084e11d60e6bc4c4e8ee7.png" alt="\mathcal{W}^o(\lambda) :=
+\bigcup_{k}\omega^o_k (\lambda)"/> gives an <em>outer step-valued approximation</em>
+of <img class="math" src="_images/math/259285701af9ac4d5ba40e025819ca77dca1d4e6.png" alt="\mathcal{W}"/>.</p>
+<p>Similarly, letting</p>
+<div class="math">
+<p><img src="_images/math/226db054f679c546209deb73c82375ae7096a0e8.png" alt="\begin{equation*}
+        \omega^i_k (\lambda) :=
+        \begin{cases}
+         \bigcap_{\lambda \in Q_k}\mathcal{W}(\lambda) &amp; \text{if} \ \lambda \in Q_k,
+         \\
+        \mathbb{R}^\mathcal{Z} &amp; \text{otherwise},
+        \end{cases}
+    \end{equation*}"/></p>
+</div><p>the correspondence defined by <img class="math" src="_images/math/eed81d252898d4f692de2469aa858577d4e08af7.png" alt="\mathcal{W}^i(\lambda) :=
+\bigcap_{k}\omega^i_k (\lambda)"/> yields an <em>inner step-valued approximation</em>
+of <img class="math" src="_images/math/259285701af9ac4d5ba40e025819ca77dca1d4e6.png" alt="\mathcal{W}"/>.</p>
+</div>
+<div class="section" id="practical">
+<h2>7.2. Practical<a class="headerlink" href="#practical" title="Permalink to this headline">¶</a></h2>
+<p>Since the convex-valued approximations
+<img class="math" src="_images/math/1cebd5121bbe28cc22927a002e86fe5deb133d03.png" alt="\mathcal{W}^o"/> and <img class="math" src="_images/math/d43e7026454178487adf15b67b160706e7b30ea1.png" alt="\mathcal{W}^i"/> are constant on each partition
+element <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, and there are <img class="math" src="_images/math/aab0e84b5fa1444b80f156fb29fe4e97e5615b9f.png" alt="K &lt; +\infty"/> partition elements, these
+approximations can be further approximated by constructing outer and inner
+approximations for the sets <img class="math" src="_images/math/e0045bcfa7fd7775e6b8dcd400058ddd22d01b4c.png" alt="\omega^o_k (\lambda)"/> and
+<img class="math" src="_images/math/37f28dd63dca3254ab6d3b9695bc956f0bd19791.png" alt="\omega^i_k (\lambda)"/> using <strong>convex polytopes</strong>.
+Let <img class="math" src="_images/math/cc114bf13d774d226e6fbe1fef159f9cb90eec53.png" alt="\mathbb{S}^{N_z-1} := \left\{x \in \mathbb{R}^{N_z} : \| x \| = 1 \right\}"/> be the unit <img class="math" src="_images/math/d7cc08b54cd290115416bf11f87c3ed4a7f1b5f7.png" alt="(N_z - 1)"/>-sphere where the norm <img class="math" src="_images/math/9af052637cd8ee69ebce0e04d918b0aca28d3ecb.png" alt="\| \cdot \|"/> is given by <img class="math" src="_images/math/7b21e96454a15760a0f352b2ae38196d20634881.png" alt="\| x \|_{2} = \left(\sum_{j=1}^{N_z} x_{j}^2\right)^{1/2}"/>. Suppose we have finite sets of directional vectors: <img class="math" src="_images/math/b78a1855ccbc3b1f82c17707ef817eb5616215ef.png" alt="H := \{ h_l \in
+\mathbb{S}^{N_z-1} : l = 1,...,L \}"/> and <img class="math" src="_images/math/ac53592f8920b233e6a935d9e4aa5067ee2f2e0d.png" alt="\tilde{H} := \{ \tilde{h}_l \in
+\mathbb{S}^{N_z-1} : l = 1,...,L' \}"/>.
+Let
+<img class="math" src="_images/math/dec53b5a3b79869d8e3ce971081276d9d48cf9fe.png" alt="\bar{\omega}^o_k (\lambda)"/> and <img class="math" src="_images/math/2342113350016e275faf2aa8fce370e945bb6de9.png" alt="\bar{\omega}^i_k (\lambda)"/>
+denote the corresponding polytope approximations, respectively, of <img class="math" src="_images/math/e0045bcfa7fd7775e6b8dcd400058ddd22d01b4c.png" alt="\omega^o_k (\lambda)"/> and
+<img class="math" src="_images/math/37f28dd63dca3254ab6d3b9695bc956f0bd19791.png" alt="\omega^i_k (\lambda)"/>, where</p>
+<div class="math">
+<p><img src="_images/math/56beb382d0c081f96ec8ac6ea85423fa2ae9a292.png" alt="\begin{equation*}
+        \bar{\omega}^o_k (\lambda) :=
+        \begin{cases}
+         \bigcap_{l=1}^{L}\{ z | h_l \cdot z \leq c_{l}^{o}(k) \} &amp; \text{if} \ \lambda \in Q_k,\\
+        \emptyset &amp; \text{otherwise}
+        \end{cases},
+    \end{equation*}"/></p>
+</div><p>and,</p>
+<div class="math">
+<p><img src="_images/math/3791f8e58194dff36560113346d9b399fae78e48.png" alt="\begin{equation*}
+        \bar{\omega}^i_k (\lambda) :=
+        \begin{cases}
+         \bigcap_{l=1}^{L'}\{ z | \tilde{h}_l \cdot z \leq c_{l}^{i}(k) \} &amp; \text{if} \ \lambda \in Q_k,\\
+        \emptyset &amp; \text{otherwise}
+        \end{cases}.
+    \end{equation*}"/></p>
+</div><p>Let <img class="math" src="_images/math/22500579226345bf9e08eb2ffaf7c802eb69c91f.png" alt="\bar{\mathcal{W}}^o := \cup_{k \in \mathbf{K}}\bar{\omega}^o_k"/>
+and <img class="math" src="_images/math/e5d39811f0efadf7e343fbead85e914e293eafe2.png" alt="\bar{\mathcal{W}}^i :=  \cup_{k \in \mathbf{K}}\bar{\omega}^i_k"/> denote the resulting correspondences. One would like the &#8220;true&#8221; correspondence <img class="math" src="_images/math/259285701af9ac4d5ba40e025819ca77dca1d4e6.png" alt="\mathcal{W}"/> to be &#8220;sandwiched&#8221; by polytope &#8220;step-correspondences&#8221; <img class="math" src="_images/math/c42727201a5915d3f3d74490318c3b99c4b97619.png" alt="\bar{\mathcal{W}}^o"/> from the outside, and, by  <img class="math" src="_images/math/2189dc75722bcc357950d0cb465583f5698ef546.png" alt="\bar{\mathcal{W}}^i"/> from the inside. <a class="footnote-reference" href="#footnote-outerinner" id="id1">[2]</a></p>
+<div class="math" id="equation-inner-outer-bound">
+<p><span class="eqno">(1)</span><img src="_images/math/ade78d2ee73584638e2252dec977e7d6d92b5239.png" alt="\bar{\mathcal{W}}^i \subset \mathcal{W}^i
+        \subset \mathcal{W} \subset \mathcal{W}^o
+        \subset \bar{\mathcal{W}}^o."/></p>
+</div><p>The last statement <a href="#equation-inner-outer-bound">(1)</a> is only true if the step-correspondence levels <img class="math" src="_images/math/895ff66444f9d9b87c41409cfecab49b57de883a.png" alt="c_{l}^{o}(k)"/> and <img class="math" src="_images/math/4d5eb9a415584be2f8a5a95c9fb1b897930af518.png" alt="c_{l}^{i}(k)"/> are defined, respectively, as the maximal and minimal levels over each domain partition element <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, in each direction <img class="math" src="_images/math/c334a76341e411cc70f8c91d4c8d8676950a89cb.png" alt="h_l \in H"/> or <img class="math" src="_images/math/d567c959d5229b0b632601aca7e908be23851b34.png" alt="\tilde{h}_l \in \tilde{H}"/>. <a class="footnote-reference" href="#footnote-ck" id="id2">[1]</a></p>
+<p>In the next section, we show how to construct these upper- and lower
+bounding estimates <img class="math" src="_images/math/895ff66444f9d9b87c41409cfecab49b57de883a.png" alt="c_{l}^{o}(k)"/> and <img class="math" src="_images/math/4d5eb9a415584be2f8a5a95c9fb1b897930af518.png" alt="c_{l}^{i}(k)"/> by using
+stochastic global optimization programs and also <em>separable</em> bilinear program
+formulations, when <img class="math" src="_images/math/259285701af9ac4d5ba40e025819ca77dca1d4e6.png" alt="\mathcal{W}"/> represents a candidate guess of the
+<em>symmetric sequential equilibrium</em> payoff correspondence in our class of
+games.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="footnote-ck" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>In the context of our game, where <img class="math" src="_images/math/259285701af9ac4d5ba40e025819ca77dca1d4e6.png" alt="\mathcal{W}"/> stands for a candidate guess of the equilibrium value correspondence, the last statement <a href="#equation-inner-outer-bound">(1)</a> is only true if the step-correspondence levels <img class="math" src="_images/math/895ff66444f9d9b87c41409cfecab49b57de883a.png" alt="c_{l}^{o}(k)"/> and <img class="math" src="_images/math/4d5eb9a415584be2f8a5a95c9fb1b897930af518.png" alt="c_{l}^{i}(k)"/> are defined, respectively, as the <strong>globally</strong> maximal and minimal values of each nonlinear programming problem (which is defined over each state-space partition element <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, in each direction <img class="math" src="_images/math/c334a76341e411cc70f8c91d4c8d8676950a89cb.png" alt="h_l \in H"/> or <img class="math" src="_images/math/d567c959d5229b0b632601aca7e908be23851b34.png" alt="\tilde{h}_l \in \tilde{H}"/>) that summarizes the concept of <em>symmetric sequential equilibrium</em> of the game.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="footnote-outerinner" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[2]</a></td><td>This idea of providing both upper- and lower-bounding estimates of a given
+correspondence was first proposed by <a class="reference internal" href="payoff_compute.html#jyc2003" id="id3">[JYC2003]</a> in the computation of
+repeated games. Our proposed method is a modification of <a class="reference internal" href="payoff_compute.html#sy2000" id="id4">[SY2000]</a>
+who in turn extended <a class="reference internal" href="payoff_compute.html#jyc2003" id="id5">[JYC2003]</a> to the computation of value correspondences
+in dynamic games. Our
+contribution will be in the form of <em>bilinear programming formulations</em> as
+a practical and computable means of constructing these approximate correspondences.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">7. Approximating SSE operators</a><ul>
+<li><a class="reference internal" href="#conceptual">7.1. Conceptual</a></li>
+<li><a class="reference internal" href="#practical">7.2. Practical</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="payoff_approximation.html"
+                        title="previous chapter">6. Equilibrium Payoff Correspondence</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="payoff_bilinear.html"
+                        title="next chapter">8. Bilinear programs and SSE operator</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="payoff_bilinear.html" title="8. Bilinear programs and SSE operator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="payoff_approximation.html" title="6. Equilibrium Payoff Correspondence"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

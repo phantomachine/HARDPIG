@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. State Space Computations &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="6. Equilibrium Payoff Correspondence" href="payoff_approximation.html" />
+    <link rel="prev" title="4. Sampling on State-space Partitions" href="sampling.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="payoff_approximation.html" title="6. Equilibrium Payoff Correspondence"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sampling.html" title="4. Sampling on State-space Partitions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="state-space-computations">
+<h1>5. State Space Computations<a class="headerlink" href="#state-space-computations" title="Permalink to this headline">¶</a></h1>
+<p>Now we describe the implementation for the key tasks involved so far. We will need to:</p>
+<ul class="simple">
+<li>compute state state partitions: <img class="math" src="_images/math/8feeaad71e48c7eed8915e13c33e3d521a83eb64.png" alt="D := \cup_{k=1}^{K}Q_k"/>;</li>
+<li>construct transitions from each subspace <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/> into corresponding sets
+<img class="math" src="_images/math/5c7ad1956c3157630623b0263ec2e11b08ae559b.png" alt="P(a)(Q_k) \subset D"/>, for every possible action profile <img class="math" src="_images/math/ee817a52ab06982a26bd5eeef7eb7b3b43c9c6e8.png" alt="a \in A"/>;</li>
+<li>record intersections <img class="math" src="_images/math/3ec9a81e08107cabf29eb64cc8d8d73a096f30ad.png" alt="P(a)(Q_k) \cap Q_k'"/>, for every <img class="math" src="_images/math/65d458398728ec7e4b3945676ca66897f19974d7.png" alt="k,k' \in \mathbf{K}"/>; and</li>
+<li>sample uniform points from each <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, and check for nonempty samples that end up transitioning to each respective intersecting set <img class="math" src="_images/math/3ec9a81e08107cabf29eb64cc8d8d73a096f30ad.png" alt="P(a)(Q_k) \cap Q_k'"/>.</li>
+</ul>
+<div class="section" id="storage">
+<h2>5.1. Storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h2>
+<p>We only need to store:</p>
+<ol class="arabic">
+<li><p class="first">each index <img class="math" src="_images/math/a5ac8f122a00f329df10c20fb6eb6d8719f3a4ca.png" alt="k' \in \mathbf{I}(a,k) \subseteq \mathbf{K}"/>, which refers to some partition element(s) <img class="math" src="_images/math/d76c941ce1cb2487be0df78a36540e6d3a47d347.png" alt="Q_{k'}"/> whose subset <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/> is accessible from <img class="math" src="_images/math/48da670534c475ad03e984666b1175e52159e55c.png" alt="Q_{k}"/> given operator <img class="math" src="_images/math/8b0022f31d20997d05884f5894566d3393ad0778.png" alt="P(a)"/>.</p>
+<blockquote>
+<div><ul class="simple">
+<li>This suffices for indexing the correct slices of equilibrium payoff sets over the corresponding subset <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/> of the state space <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">the finite number of vertices of each <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/> and the corresponding linear (weak) inequality representation of each <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/>.</p>
+<blockquote>
+<div><ul class="simple">
+<li>This will become apparent later when we solve <em>separable</em> bilinear programming problems where it involves optimizing over these subsets <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/> (when constructing max-min punishment values in the game).</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">the sub-samples from all the Hit-and-Run realizations that belong to every partition element
+<img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/> which will end up in particular intersections summarized by
+each polytope <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/>.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="implementation">
+<h2>5.2. Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>Since we have finite partition elements <img class="math" src="_images/math/48da670534c475ad03e984666b1175e52159e55c.png" alt="Q_{k}"/> and finite action
+profile set <img class="math" src="_images/math/ff54caa68cb95e3e71715674ac380649da4ddc10.png" alt="A \ni a"/>, then we can enumerate and store all intersections
+previously denoted by <img class="math" src="_images/math/b2e937d078545ad4b8480d2f33cbd43458bc8157.png" alt="\{ Poly_{k'(k,a)}: \forall a \in A, k \in
+\mathbf{K} \}"/> or equivalently by their index sets <img class="math" src="_images/math/4e878f163193fd22bafa72f609614a5d92f2c7c9.png" alt="\{ \mathbf{I}(a,k):
+(a,k) \in A \times \mathbf{K} \}"/>.</p>
+<div class="topic">
+<p class="topic-title first">Pseudocode</p>
+<div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/88e1b98e640fd09fdabcf05dc092ff504f6ff7ec.png" alt="(a,k)\in A \times \mathbf{K}"/>:</div>
+</div>
+<ul>
+<li><p class="first">Get vertex representation of <img class="math" src="_images/math/40dbe74ba664d9025ebc02b1429060c124cacff0.png" alt="Q_k \in D"/></p>
+</li>
+<li><p class="first">Set <img class="math" src="_images/math/8b0022f31d20997d05884f5894566d3393ad0778.png" alt="P(a)"/> as <img class="math" src="_images/math/f48b617185733d8dd6712643f1ab17c736661a06.png" alt="P"/></p>
+</li>
+<li><p class="first">Get vertex representation <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> from <img class="math" src="_images/math/e228752467da527fcc2d25e6d8f02e677fb45381.png" alt="P(Q_k)"/></p>
+</li>
+<li><dl class="first docutils">
+<dt>Simulate Hit-and-Run uniform realizations in simplex <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>. Get</dt>
+<dd><div class="first last math">
+<p><img src="_images/math/a4d8a1ca1fb084975b3a9e029db20e87f3c98da6.png" alt="X := \{ \lambda_n \}_{n=1}^{N_{sim}} \leftarrow RandomPolyFill(N_{sim},T)"/></p>
+</div></dd>
+</dl>
+</li>
+<li><p class="first">Set <img class="math" src="_images/math/57df190b7770922cbc4202c9f2d44482bafd3385.png" alt="i \leftarrow 0"/></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/b87e80476fea215d6575817ccf27c3d01eb4c2c7.png" alt="k' \in \mathbf{K}"/>:</div>
+</div>
+<ul class="simple">
+<li>Get vertex representation of <img class="math" src="_images/math/89dd426dc9078936b319fb88915e015b087be71b.png" alt="Q_k' \in D"/></li>
+<li>Get intersection <img class="math" src="_images/math/fa38cea13bf30919119cbe13bd464955138258d5.png" alt="InterPoly = Q_{k'} \cap T"/> (a polytope) as:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/3c3d034682c6fe2d8a356ba4664af46c6976ab42.png" alt="InterPoly \leftarrow PolyBool(Q_{k'},T)"/></p>
+</div><ul>
+<li><p class="first">If <img class="math" src="_images/math/aee7178453069fe5fa2cd8a98e3ce6a1c10e7b9c.png" alt="InterPoly \neq \emptyset"/>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Set <img class="math" src="_images/math/5cd0406e285ae54567fc5c5f4bb09c6613c45886.png" alt="i \leftarrow i + 1"/></li>
+<li>Store index to partition elements <img class="math" src="_images/math/d76c941ce1cb2487be0df78a36540e6d3a47d347.png" alt="Q_{k'}"/> when <img class="math" src="_images/math/e1cae1a14770538fa8b6fbeda3c47af2ce66be73.png" alt="InterPoly"/> is nonempty. Set</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/05eda7a6df82e1802ed0cefeffc8455c4120a5be.png" alt="TriIndex(a,k)(i) \gets k'"/></p>
+</div><ul class="simple">
+<li>Store vertex data of polytope. Set:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/daed5434f619b8e5437680a16f54f1a5b9d30b4e.png" alt="PolyVerts(a,k,k') \gets Interpoly"/></p>
+</div><ul class="simple">
+<li>Store linear inequality representation of the same polytope. Set:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/1dd9d73c233d1f15ad799be618410c1a140ef253.png" alt="PolyLcons(a,k,k') \gets Vert2Lcon(InterPoly)"/></p>
+</div><ul class="simple">
+<li>Map Monte Carlo realizations <img class="math" src="_images/math/f026aecf11ec7f6141ab863f260d395f94b10f51.png" alt="X"/> under operator <img class="math" src="_images/math/f48b617185733d8dd6712643f1ab17c736661a06.png" alt="P"/>. Set:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/07d5c4fcb42b263c4de4967fa874d60ec4e2a4e4.png" alt="Y \gets P(X)"/></p>
+</div><ul class="simple">
+<li>List members of <img class="math" src="_images/math/b018f9153661cd702305aecc28713fd9705e7cb3.png" alt="Y"/> that end up in <img class="math" src="_images/math/e1cae1a14770538fa8b6fbeda3c47af2ce66be73.png" alt="InterPoly"/>. Set:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/7c25afe78145379a8a6ac87cad5d8b63c021342f.png" alt="\begin{eqnarray*}
+Y_{in} &amp; \gets &amp; InPolytope(Y, InterPoly)
+\\
+\{ PolyRand(a,k,k'), in \} &amp; \gets &amp; Y_{in}
+\end{eqnarray*}"/></p>
+</div><ul class="simple">
+<li>Record all vectors <img class="math" src="_images/math/7b5be28e49aed5d434cd611507e9ea3db2c115a0.png" alt="\{\lambda_{n}\} \subseteq X"/> that induce <img class="math" src="_images/math/8476415caa9ac84afa7327a6e1e65902a87eb25a.png" alt="Y_{in}"/> under map <img class="math" src="_images/math/8b0022f31d20997d05884f5894566d3393ad0778.png" alt="P(a)"/>:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/fac0aa7afa49c26be2f2fd3c069fbbe79a6ddab0.png" alt="\{PolyQjRand(a,k,k'), Index\} \gets X(in)"/></p>
+</div><ul class="simple">
+<li>Store corresponding indices <img class="math" src="_images/math/a4451748aea9388f2cd046303a2152979f78b6ee.png" alt="\{n : \lambda_n P(a)\in Y_{in}\}"/>:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/a6cfb7084794154f57463f01b17a90b2811fce13.png" alt="PolyIndexQjRand(a,k,k') \gets Index"/></p>
+</div></div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Return</strong>: <img class="math" src="_images/math/857f948add0a39c9563340d628b096966125bb9f.png" alt="TriIndex, PolyVerts, PolyLcons, PolyRand, PolyQjRand, PolyIndexQjRand"/></p>
+</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Computationally, we only need to construct sets <img class="math" src="_images/math/4fc5101bbc903cd3b8dc17d75699028c99c29393.png" alt="\{
+Poly_{k'(k,a)}: \forall a \in A, k \in \mathbf{K} \}"/> (e.g. <em>PolyVerts</em> and
+<em>PolyLcons</em> in the pseudocode above) or <img class="math" src="_images/math/5196199383a79f83d39e0e94cc8804d1ad4f0c2b.png" alt="\{ \mathbf{I}(a,k): (a,k) \in A
+\times \mathbf{K} \}"/> (i.e. <em>TriIndex</em> in the pseudocode above) once beforehand.</p>
+</div>
+<div class="topic">
+<p class="topic-title first">Relevant functions <img class="math" src="_images/math/4e489a9cc4107ff2504d2d9dcf056de96d93c33a.png" alt="\blacktriangleright"/></p>
+<dl class="function">
+<dt id="Simplex_IntersectPmap">
+<code class="descname">Simplex_IntersectPmap</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#Simplex_IntersectPmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 4 possible output:</p>
+<ul>
+<li><p class="first"><em>QP</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>a structure variable containing all others below.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><em>TriIndex</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>a cell array containing indices <img class="math" src="_images/math/8322afa57231a57ebcc87046eb8a72ad3e2638d0.png" alt="k'(a,k) \in \mathbf{I}(a,k) \subseteq \mathbf{K}"/> of partition elements that have non-empty intersections with each simplicial image <img class="math" src="_images/math/f84693b39984d9645aea3d95062a5baafa3238b9.png" alt="P(a)(Q_{k})"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><em>PolyVerts</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>a cell array, where each cell is an array with rows corresponding to vertices of <img class="math" src="_images/math/277c5a0157f86bd023f6746d686468b656d644bf.png" alt="Poly_{k'(a,k)}"/>, a polytope contained in the partition element <img class="math" src="_images/math/48da670534c475ad03e984666b1175e52159e55c.png" alt="Q_{k}"/>. Each cell element is consistent with the index <img class="math" src="_images/math/83a35cfa125ec19c0abcf5710ab3d91f56c6cb66.png" alt="k'(a,j) \in \mathbf{I}(a,k) \subseteq \mathbf{K}"/> stored in <em>TriIndex</em>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><em>PolyLcons</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>is a set of linear (weak) inequality constraint representation of <em>PolyVerts</em>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><em>PolyRand</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Realizations of random vectors <img class="math" src="_images/math/06b86d271f20149dc7199ee57a724feee99cc96b.png" alt="\lambda_{s}P(a) \in Q_{k'}"/> where <img class="math" src="_images/math/341e56b915d45373070e88f93f0c8559a7e30bbb.png" alt="k' \in \mathbf{I}(a,k)"/> and <img class="math" src="_images/math/113e5e0a39420542fcc637a179dce010927f29c8.png" alt="\lambda_{s} \sim \textbf{U}[Q_{k}]"/>&#8212;i.e. is uniformly drawn  from <img class="math" src="_images/math/48da670534c475ad03e984666b1175e52159e55c.png" alt="Q_{k}"/> according to a Hit-and-Run algorithm [ HYPERLINK TO ALGORITHM DESCRIPTION ], classified according to each <em>PolyVerts{a}{k}{k&#8217;}</em>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><em>PolyQjRand</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Inverse of <em>PolyRand</em>. Each <em>PolyQjRand{a}{k}{k&#8217;}</em> gives the set of <img class="math" src="_images/math/113e5e0a39420542fcc637a179dce010927f29c8.png" alt="\lambda_{s} \sim \textbf{U}[Q_{k}]"/>, where under action profile <img class="math" src="_images/math/7dd2a5ea01fbd72ad2a58dd1f3d6ecbfde6208a1.png" alt="a"/>, the induced vector is <img class="math" src="_images/math/e276236ffbfd3e91f7408f02b10f0a49c28e9836.png" alt="P(a)(\lambda_{s}) \in Q_{k'}"/> and <img class="math" src="_images/math/341e56b915d45373070e88f93f0c8559a7e30bbb.png" alt="k' \in \mathbf{I}(a,k)"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><em>PolyIndexQjRand</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Each <em>PolyIndexQjRand{a}{j}</em> gives the set of indices <img class="math" src="_images/math/8ef01470714401ec1b8f31bec77b28d38502669a.png" alt="\{
+s \in \{1,...,N_{sim}\} : s \mapsto \lambda_{s} \in Q_{k}, \lambda_{s}P(a) \in Q_{k'}  \text{ and } k' \in \mathbf{I}(a,k)  \}"/>. The number of <em>Monte Carlo simulations</em> of these uniform vectors subject to each convex body <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/> has to be prespecified as <img class="math" src="_images/math/9a4c891d83e1485b36179b859d3cd3b340d1c263.png" alt="N_{sim}"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><strong>PolyBool</strong>, <strong>Simplex_Intersect</strong>, <strong>Vert2Lcon</strong>, <strong>RandPolyFill</strong>, <strong>cprnd</strong></p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">5. State Space Computations</a><ul>
+<li><a class="reference internal" href="#storage">5.1. Storage</a></li>
+<li><a class="reference internal" href="#implementation">5.2. Implementation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sampling.html"
+                        title="previous chapter">4. Sampling on State-space Partitions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="payoff_approximation.html"
+                        title="next chapter">6. Equilibrium Payoff Correspondence</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="payoff_approximation.html" title="6. Equilibrium Payoff Correspondence"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sampling.html" title="4. Sampling on State-space Partitions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

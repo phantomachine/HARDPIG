@@ -1,0 +1,43 @@
+MinGW32 configured with:
+../configure ADD_FFLAGS="-static-libgcc" CDEFS="-DWITHOUT_PTHREAD=1"
+Add --with-matlab-home=path if the 32-bit Matlab version you want is not on your path
+Manually add -static to GM_ADD_LIBS in mexopts.bat after "make gnumex"
+
+
+MinGW64 (using TDM-GCC distribution) configured with:
+../configure --with-matlab-home=/d/MATLAB/R2009bSP1_win64 \
+  ADD_FFLAGS="-static-libgcc" CDEFS="-DWITHOUT_PTHREAD=1"
+Use --with-matlab-home=path if the 64-bit Matlab version you want is not on your path
+Manually add -static to GM_ADD_LIBS in mexopts.bat after "make gnumex"
+
+
+Mac (using Gfortran binary package from GNU wiki) configured with:
+../configure --disable-shared --with-blas=BUILD --with-lapack=BUILD \
+  CC=/usr/local/gfortran/bin/gcc CXX=/usr/local/gfortran/bin/g++ \
+  F77=/usr/local/gfortran/bin/gfortran \
+  ADD_FFLAGS="-static-libgcc" \
+  ADD_CXXFLAGS="-static-libgcc -static-libstdc++"
+Add --with-matlab-home=path if the Matlab version you want is not on your path
+Copy mexopts.sh from $MATLAB_HOME/bin/ to Matlab interface build directory
+  (if not already there) and manually remove all instances of "-arch $ARCHS"
+Replace -lquadmath with /usr/local/gfortran/lib/libquadmath.a
+  in Matlab interface Makefile
+
+
+Linux (using Google GCC-4.7 branch SVN rev 191207, built --with-pic) configured with:
+../configure --disable-shared --disable-linear-solver-loader \
+  --disable-pkg-config CDEFS="-DWITHOUT_PTHREAD=1" \
+  CC=/usr/local/gcc-google-4_7/bin/gcc \
+  CXX=/usr/local/gcc-google-4_7/bin/g++ \
+  F77=/usr/local/gcc-google-4_7/bin/gfortran \
+  ADD_FFLAGS="-fPIC -static-libgcc" \
+  ADD_CFLAGS="-fPIC" \
+  ADD_CXXFLAGS="-fPIC -static-libgcc -static-libstdc++"
+Add --with-matlab-home=path if the Matlab version you want is not on your path
+Add --with-blas=BUILD --with-lapack=BUILD if needed to override -lblas and -llapack
+Copy mexopts.sh from $MATLAB_HOME/bin/ to Matlab interface build directory and
+  manually remove -pthread
+Manually remove -ldl and -lpthread from LIBS in Matlab interface Makefile
+  (these may be okay to leave in, so wouldn't need to disable LSL or pthreads)
+Replace -lgfortran with /usr/local/gcc-google-4_7/lib64/libgfortran.a and -lquadmath
+  with /usr/local/gcc-google-4_7/lib64/libquadmath.a in Matlab interface Makefile

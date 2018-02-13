@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Equilibrium Payoff Correspondence &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="7. Approximating SSE operators" href="payoff_concept.html" />
+    <link rel="prev" title="5. State Space Computations" href="compute_statespace.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="payoff_concept.html" title="7. Approximating SSE operators"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="compute_statespace.html" title="5. State Space Computations"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="equilibrium-payoff-correspondence">
+<h1>6. Equilibrium Payoff Correspondence<a class="headerlink" href="#equilibrium-payoff-correspondence" title="Permalink to this headline">¶</a></h1>
+<p>In <a class="reference internal" href="statespace.html"><em>State Space</em></a> we constructed a partition of the simplex <img class="math" src="_images/math/28aaf66546249cb984bb6cc2d62b555dfdaa8696.png" alt="D:= \Delta(\mathcal{Z})"/>. Now, we let <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> be the domain of the equilibrium payoff correspondence.
+The task ahead is to approximate the equilibrium value correspondence <img class="math" src="_images/math/faed0a4657694e798a9667cb4d5120404c66eda1.png" alt="\mathcal{V}: D
+\rightrightarrows \mathbb{R}^{\mathcal{Z}}"/> using
+convex-valued step correspondences.</p>
+<div class="section" id="background">
+<h2>6.1. Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>Notation reminder:</p>
+<ul>
+<li><p class="first">Action profile of small players on <img class="math" src="_images/math/ac2b83372f7b9e806a2486507ed051a8f0cab795.png" alt="[0,1]"/>, <img class="math" src="_images/math/ee817a52ab06982a26bd5eeef7eb7b3b43c9c6e8.png" alt="a \in A"/>. (Assume <img class="math" src="_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/> is a
+finite set.) Each small player takes on a <em>personal state</em> <img class="math" src="_images/math/4fddab3d91526849ad9b7eab726e8f3907a60852.png" alt="j \in
+\mathcal{Z} := \{ -N,...,-1,+1,...,+M\}"/> at each date <img class="math" src="_images/math/86cf5304d10821bc4472c57b3e384abcaf784f6c.png" alt="t \in
+\mathbb{N}"/>.</p>
+</li>
+<li><p class="first">Actions of large player (<img class="math" src="_images/math/b92c09a649305a0aef3239729d93cdf941e0e5cf.png" alt="G"/>), <img class="math" src="_images/math/104b6fd62911e5cf7ec3dac5ce0098602263a340.png" alt="b \in B"/>. <img class="math" src="_images/math/2b6da043a0eba8ef7f9c4914891c8c8de77a6e75.png" alt="B := \{b \in
+\mathbb{R}^{\mathcal{Z}}: -m \leq b(j) \leq \bar{m}, \text{ for } j &gt; 0,
+\text{ and, } 0 \leq b(j) \leq \bar{m}, \text{ for } j &lt; 0, \forall j \in
+\mathcal{Z}\}"/> is a
+finite set and contains vectors <img class="math" src="_images/math/5e87bf41a96deddf6cb485ff530f153f2590e9cc.png" alt="b"/> that are physically feasible
+(but not necessarily government-budget feasible in all states).</p>
+</li>
+<li><p class="first">Extended payoff vector space, <img class="math" src="_images/math/e158aac9819dcb71a61eceecd65ef20594fd743a.png" alt="\mathbb{R}^{\overline{\mathcal{Z}}}"/>,
+where <img class="math" src="_images/math/20efe4aba8496f71eba20bd0f47e329db10fe8f1.png" alt="\overline{\mathcal{Z}} := \mathcal{Z} \cup \{G\}"/>.</p>
+</li>
+<li><p class="first">Probability distribution of small players on finite set
+<img class="math" src="_images/math/ee8be2f257d739f69ee5ff88a2828874bb70bc47.png" alt="\mathcal{Z}"/>, <img class="math" src="_images/math/0d427f274cd313427f3b05373a0896cf761acaf1.png" alt="\lambda \in D := \Delta(\mathcal{Z})"/>.</p>
+</li>
+<li><p class="first">Profile of continuation values of agents, <img class="math" src="_images/math/dc6b4433ac20a0112107724d2fee0021d718f210.png" alt="w \in
+\mathbb{R}^{\mathcal{Z}}"/>.</p>
+</li>
+<li><p class="first">Transition probability matrix at action profile <img class="math" src="_images/math/7dd2a5ea01fbd72ad2a58dd1f3d6ecbfde6208a1.png" alt="a"/>, <img class="math" src="_images/math/8b0022f31d20997d05884f5894566d3393ad0778.png" alt="P(a)"/></p>
+</li>
+<li><p class="first">Individual <img class="math" src="_images/math/5c3b5e60b4e3aa8cc0f6c99d354a867530fdf971.png" alt="j \in \mathcal{Z}"/>, given action <img class="math" src="_images/math/1868a7b67df2a6e8c3fd71f5b058169e701560c4.png" alt="a(j)"/> faces transition probability distribution, <img class="math" src="_images/math/6f9d9f183fa2e93ae662d1ab33ddfd68d36f001b.png" alt="p^j(a(j)) \in P(a)"/></p>
+</li>
+<li><p class="first">Flow payoff profile, <img class="math" src="_images/math/be58e9e68d19829fe30de420a2eb4f1f469d2548.png" alt="v_j(a,b):= u(c^b(j))-\phi(a_j)"/>, where</p>
+<blockquote>
+<div><ul class="simple">
+<li><img class="math" src="_images/math/09af0c62f129669b7f40cebbf8ec364b19ed12e8.png" alt="v(a,b):=(v_j(a,b))_{j\in \mathcal{Z}}"/>;</li>
+<li>Utility-of-consumption function, <img class="math" src="_images/math/e604e8d7b00eca3bc81ab2814bd1186b390652a4.png" alt="u(\cdot)"/>; and</li>
+<li>Disutility-of-effort/action function, <img class="math" src="_images/math/34292174755a281a989b58c644fddd4336733837.png" alt="-\phi(\cdot)"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Public date-<img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> history, <img class="math" src="_images/math/bf390a9a1a006d9e9d4db8c45f4f689125ac53e1.png" alt="h^t := \{ \lambda^t, x^t, b^{t-1} \}_{t \geq 0}"/>, where</p>
+<blockquote>
+<div><ul class="simple">
+<li><img class="math" src="_images/math/b920b99fa2d43f12ad490c69022422aa05125613.png" alt="\lambda^t = (\lambda_0,...,\lambda_t)"/> is a history of agent
+distributions up to and include that of date <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>;</li>
+<li><img class="math" src="_images/math/1f5dc7ff97caa6b93e93a20f71365b360878f4c7.png" alt="x^t = (x_0,...,x_t)"/> where <img class="math" src="_images/math/86ec1edb070ffe9216097a80189ee3434c9b5f20.png" alt="x_t"/> is a date-<img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> realization of the
+random variable <img class="math" src="_images/math/9cd83d866a9bf2c16e7ac1983013000df4b7fdbe.png" alt="X_t \sim_{i.i.d.} \mathbf{U}([0,1])"/>; and</li>
+<li><img class="math" src="_images/math/34b17e3c005f472b10edd923b1f48ac6a69c7c1d.png" alt="b^{t-1} = (b_0,...,b_{t-1})"/> is a history of government policy
+actions up to the end of date <img class="math" src="_images/math/4f4fe5daf6f4859c1300892450a9fb8c2b51f70c.png" alt="t-1"/> and let <img class="math" src="_images/math/748f8f30dc7570faf28fb7e3dea1c3ff7a2ca2b4.png" alt="\{b_{-1}\} =
+\emptyset"/>.</li>
+</ul>
+</div></blockquote>
+<p>Also, <img class="math" src="_images/math/e1dc7b493b078d076430c36ec1391667b8e8a3af.png" alt="h^0 := (\lambda_0, x_0)"/>.</p>
+</li>
+</ul>
+<div class="topic" id="def-consistency">
+<p class="topic-title first">Definition (Consistency)</p>
+<p>Let <img class="math" src="_images/math/2403fa4b3ce1b895f6395ac84e554732b679cc94.png" alt="\mathcal{W}:D \rightrightarrows \mathbb{R}^{\overline{\mathcal{Z}}}"/> be a compact- and convex-valued correspondence having the property that <img class="math" src="_images/math/be50b1bb46c3e5f50a33af6e33e93a6baca035d4.png" alt="w(G)= \sum_{j\in\mathcal{Z}}\lambda(j)w(j)"/> for all <img class="math" src="_images/math/61d845810b6d2cf5b7c0a97a097eeb02b526b456.png" alt="(\lambda,w)\in\text{graph}(\mathcal{W})"/>. A vector <img class="math" src="_images/math/03d5aef844cc04469f71ed6e520e110e393e07a7.png" alt="(b,a,\lambda',w)\in B \times A \times\Delta(\mathcal{Z}) \times\mathbb{R}^{\overline{\mathcal{Z}}}"/> is <strong>consistent with respect to</strong> <img class="math" src="_images/math/259285701af9ac4d5ba40e025819ca77dca1d4e6.png" alt="\mathcal{W}"/> at <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> if</p>
+<ol class="arabic simple">
+<li><img class="math" src="_images/math/61f960ef0bd5bac5bf517438b680b6b5e791ea46.png" alt="-\lambda b^{T} \geq 0"/>;</li>
+<li><img class="math" src="_images/math/233a2cb8d86b58eed177e7754ae89fb90fee290f.png" alt="\lambda'=\lambda P(a)"/>;</li>
+<li><img class="math" src="_images/math/371f028b232f7cc35af215d3b1dbe3d9543d849c.png" alt="w\in\mathcal{W}(\lambda')"/>; and</li>
+<li>For all <img class="math" src="_images/math/5bc7aaed5f3726bf0fa94163aa56dcd9ee031ab7.png" alt="j\in\mathcal{Z}"/>, <img class="math" src="_images/math/a646fa966ddf25a8b2bc210b8281dea29cd2881e.png" alt="a(j)\in\text{argmax}_{a'}\left\{(1-\delta) \left[u(c^b(j))-\phi(a')\right]+\delta\mathbb{E}_{p^j(a')}[w(i)]\right \}"/>.</li>
+</ol>
+</div>
+<div class="topic" id="def-admissibility">
+<p class="topic-title first">Definition (Admissibility)</p>
+<dl class="docutils">
+<dt>For <img class="math" src="_images/math/1530705ce12629310a546141d7abee6f4d437d03.png" alt="(\lambda,b) \in D \times B"/> let</dt>
+<dd><div class="first last math">
+<p><img src="_images/math/f8e71d573a03d84b9369db8eabe2dd38deb43b6c.png" alt="\pi(\lambda,b):=\min_{(a',\lambda'',w')}
+\left[(1-\delta)\sum_{j\in\mathcal{Z}}\lambda(j)[u(c^b(j))-\phi(a'(j))]
++ \delta\sum_{j\in\mathcal{Z}}\lambda''(j)w'(j)\right],"/></p>
+</div></dd>
+</dl>
+<p>subject to <img class="math" src="_images/math/27d8a116dda4adb60256d3f7bcbd3bf62e6d8125.png" alt="(b,a',\lambda'',w')"/> is consistent with respect to <img class="math" src="_images/math/1934c054488a10d57abc87505be1d79f54e3dd4d.png" alt="\mathcal{W}(\lambda)"/>. Let <img class="math" src="_images/math/4051d0d7ee6bc82579ed0335a8d0011a660379e0.png" alt="(\tilde{a}(\lambda,b),\tilde{\lambda}'(\lambda,b),\tilde{w}(\lambda,b))"/> denote the solutions to the corresponding minimization problem. A vector <img class="math" src="_images/math/90b2ad1b2df95456bc3ff1bd9fb9f2a4ec58e1d9.png" alt="(b,a,\lambda',w)\in B \times A \times D \times\mathbb{R}^{\overline{\mathcal{Z}}}"/> is said to be <strong>admissible with respect to</strong> <img class="math" src="_images/math/1934c054488a10d57abc87505be1d79f54e3dd4d.png" alt="\mathcal{W}(\lambda)"/> if</p>
+<ol class="arabic simple">
+<li><img class="math" src="_images/math/16b8dfc0951dcb092b81d044b252b7c649eab445.png" alt="(b,a,\lambda',w)"/> is consistent with respect to <img class="math" src="_images/math/1934c054488a10d57abc87505be1d79f54e3dd4d.png" alt="\mathcal{W}(\lambda)"/>; and</li>
+<li><img class="math" src="_images/math/27e692164fdc4c55c83bc2faa71f3b0c2fbf15af.png" alt="(1-\delta)\sum_{j\in\mathcal{Z}}\lambda(j)[u(c^b(j))-\phi(a(j))]\delta\sum_{j\in\mathcal{Z}}\lambda'(j)w(j)\geq \max_{b'\in B(\lambda)}\pi(\lambda,b')"/>, where <img class="math" src="_images/math/6c28bdae2e2061e7f17f0f7483e0ffeb21c7d4c3.png" alt="B(\lambda) := \{ b \in B :- \lambda b^{T} \geq 0 \}"/>.</li>
+</ol>
+</div>
+<div class="topic">
+<p class="topic-title first">Admissible payoff vectors</p>
+<p>The payoff vector defined by an admissible vector <img class="math" src="_images/math/16b8dfc0951dcb092b81d044b252b7c649eab445.png" alt="(b,a,\lambda',w)"/> at <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is given by</p>
+<div class="math">
+<p><img src="_images/math/b1c2bf8ec4e4adb5c7ec21288d300a946ca510b8.png" alt="E_G(b,a,\lambda',w)(\lambda)&amp;=(1-\delta)\sum_{j\in\mathcal{Z}}\lambda(j)[u(c^b(j))-\phi(a(j))]+ \delta\sum_{j\in\mathcal{Z}}\lambda'(j)w(j)
+\\
+E_j(b,a,\lambda',w)(\lambda)&amp;=(1-\delta) \left[u(c^b(j))-\phi(a(j))\right] + \delta \mathbb{E}_{p^j(a(j))}[w(i)]."/></p>
+</div><p>Note that <img class="math" src="_images/math/fa6477e9650c8afec68a38d0d6cc3fdebbb82b3a.png" alt="E_G(b,a,\lambda',w)(\lambda)=\sum_{j\in\mathcal{Z}}\lambda(j)E_j(b,a,\lambda',w)(\lambda)"/>.</p>
+</div>
+<p>In the paper, we proved the following:</p>
+<div class="topic">
+<p class="topic-title first">SSE Recursive Operator</p>
+<p>A SSE is a strategy profile <img class="math" src="_images/math/dc0deb97b6b4dbae63842f226db3fd165238eeb9.png" alt="\sigma \equiv \{ \alpha_t, \beta_t\}_{t \geq 0}"/> such that given initial game state <img class="math" src="_images/math/9742e6e377b629e67aa255584a6d654fe39db422.png" alt="\lambda_0"/>, for all dates <img class="math" src="_images/math/6e235f85a5874f4aebe0b64d53bee3ee9c4d6eb0.png" alt="t \geq 0"/>, and all public histories <img class="math" src="_images/math/bf390a9a1a006d9e9d4db8c45f4f689125ac53e1.png" alt="h^t := \{ \lambda^t, x^t, b^{t-1} \}_{t \geq 0}"/>, <img class="math" src="_images/math/d411415139222c03ef681559249b01f52539a6bd.png" alt="a := \alpha_t(h^t, b_t)"/> and <img class="math" src="_images/math/919c7085ed3ffb37601396420d917d5d912b2a0d.png" alt="b := \beta_t(h^t)"/>, and, if <img class="math" src="_images/math/6897ba3eb0e4b1418a1878cf7ac9eccb6f5ae1ca.png" alt="\mathcal{V}"/> is the SSE payoff correspondence, then <img class="math" src="_images/math/6897ba3eb0e4b1418a1878cf7ac9eccb6f5ae1ca.png" alt="\mathcal{V}"/> is the largest fixed point that satisfies the recursive operator</p>
+<div class="math">
+<p><img src="_images/math/1b332740f0e6a89ce7e9ecc37e18ae9aedebec28.png" alt="\mathbf{B}(\mathcal{V})(\lambda):=\text{co}\{E(b,a,\lambda',w)(\lambda)\,\vert\,
+(b,a,\lambda',w) &amp;\text{ is admissible w.r.t.} \mathcal{V}(\lambda)\},"/></p>
+</div><p>where <img class="math" src="_images/math/059c5e89c73e376913fa0afd8100a71d9f390c29.png" alt="\text{co}"/> denotes the convex hull of a set.</p>
+<p>The object of interest can be found recursively: <img class="math" src="_images/math/5edbc770d2064aa5f31b39f8e40a3a86a6aa0682.png" alt="\mathcal{V} = \lim_{n
+\rightarrow +\infty} \mathbf{B}^n(\mathcal{W}_0)"/>, for any initial
+convex-valued and compact correspondence <img class="math" src="_images/math/371202d396cdacf262e09ba775c6366e80e499b4.png" alt="\mathcal{W}_0"/>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Given state <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> and agent payoff vector
+<img class="math" src="_images/math/bf6c43adc71f004785792ed51c326e0425fd8e3a.png" alt="w \in \mathbb{R}^\mathcal{Z}"/> determine a unique corresponding
+government payoff given by <img class="math" src="_images/math/3317a6f842166c68b9a8c7a44705c25528b5a9fc.png" alt="\lambda \cdot w"/>. We can thus ignore the
+government payoff when defining the equilibrium value correspondences and
+their approximations, and restrict their codomain to
+<img class="math" src="_images/math/65529b85effcda02a3d2480b8813115a32adb8a8.png" alt="\mathbb{R}^\mathcal{Z}"/>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. Equilibrium Payoff Correspondence</a><ul>
+<li><a class="reference internal" href="#background">6.1. Background</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="compute_statespace.html"
+                        title="previous chapter">5. State Space Computations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="payoff_concept.html"
+                        title="next chapter">7. Approximating SSE operators</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="payoff_concept.html" title="7. Approximating SSE operators"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="compute_statespace.html" title="5. State Space Computations"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

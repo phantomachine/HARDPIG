@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="#" />
+    <link rel="next" title="1. State Space" href="statespace.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="statespace.html" title="1. State Space"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>H</strong> eterogeneous</div>
+<div class="line-block">
+<div class="line"><strong>A</strong> gent</div>
+</div>
+<div class="line"><strong>R</strong> ecursive</div>
+<div class="line-block">
+<div class="line"><strong>D</strong> ynamic</div>
+</div>
+<div class="line"><strong>P</strong> ublic</div>
+<div class="line-block">
+<div class="line"><strong>I</strong> nsurance</div>
+</div>
+<div class="line"><strong>G</strong> ames.</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<p>This web documentation details the methods proposed in the paper by Kam and
+Stauber, &#8220;Computing Dynamic Public Insurance Games with Endogenous Agent
+Distributions&#8221;.</p>
+<p><a class="reference download internal" href="_downloads/doc.pdf"><code class="xref download docutils literal"><span class="pre">This</span></code></a> is a downloadable PDF version of the documentation.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="statespace.html">1. State Space</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="statespace.html#properties">1.1. Properties</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actions_transitions.html">2. Actions and Transitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intersections.html">3. Intersections with State-space Partitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intersections.html#polytope-intersection-problems">3.1. Polytope intersection problems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sampling.html">4. Sampling on State-space Partitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compute_statespace.html">5. State Space Computations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compute_statespace.html#storage">5.1. Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compute_statespace.html#implementation">5.2. Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="payoff_approximation.html">6. Equilibrium Payoff Correspondence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="payoff_approximation.html#background">6.1. Background</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="payoff_concept.html">7. Approximating SSE operators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="payoff_concept.html#conceptual">7.1. Conceptual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payoff_concept.html#practical">7.2. Practical</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="payoff_bilinear.html">8. Bilinear programs and SSE operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="payoff_bilinear_punish.html">9. Punishment values and BLPs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="payoff_bilinear_punish.html#implementing-punishment-values">9.1. Implementing punishment values</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="payoff_compute.html">10. Computing approximate SSE payoffs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="payoff_compute.html#outer-approximation-conceptual">10.1. Outer Approximation: Conceptual</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payoff_compute.html#outer-approximation-implementation">10.2. Outer Approximation: Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="payoff_compute.html#inner-approximation-conceptual">10.3. Inner Approximation: Conceptual</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="software">
+<h1>Software<a class="headerlink" href="#software" title="Permalink to this headline">¶</a></h1>
+<p>HARDPIG relies on the following software:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="http://www.mathworks.com">MATLAB</a> platform</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://users.isy.liu.se/johanl/yalmip/pmwiki.php?n=Solvers.BMIBNB">YALMIP</a> BMIBNB global optimization solver</p>
+<blockquote>
+<div><ul class="simple">
+<li>Bilinear Matrix Inequality Branch-and-Bound solver</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.gnu.org/software/glpk/">GNU GLPK</a> linear programming
+solver (in ANSI C)</p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.sbsi-sol-optimize.com/asp/sol_products_snopt_desc.htm">SNOPT</a> general-purpose local optimization solver (Fortran)</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://www.scicomp.ucsd.edu/~peg/Software.html">MATLAB Executable binaries files</a> for up to 300 variables and 300 constraints available freely from Phillip E. Gill.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>Source codes (in MATLAB) and executables (in C/Fortran) are available from the authors via email.</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a></li>
+<li><a class="reference internal" href="#software">Software</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="statespace.html"
+                        title="next chapter">1. State Space</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="statespace.html" title="1. State Space"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>10. Computing approximate SSE payoffs &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="prev" title="9. Punishment values and BLPs" href="payoff_bilinear_punish.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="payoff_bilinear_punish.html" title="9. Punishment values and BLPs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="computing-approximate-sse-payoffs">
+<h1>10. Computing approximate SSE payoffs<a class="headerlink" href="#computing-approximate-sse-payoffs" title="Permalink to this headline">¶</a></h1>
+<p>Now we are ready to describe the computation of the approximate SSE payoff correspondence. The basic idea is from <a class="reference internal" href="#jyc2003" id="id1">[JYC2003]</a> who use <em>linear program</em> (LP) formulations as the approximation. Our extension illustrates that when we have probability distributions (with finite support) as state variables, the approximate SSE payoff correspondence can be constructed via <em>bilinear program</em> (BLP) formulations.</p>
+<p>Notation:</p>
+<ul>
+<li><p class="first">Let</p>
+<div class="math">
+<p><img src="_images/math/4a8bcc399a2d5415e218fc1195f506433622b76c.png" alt="v_j(a,b) := u(c^b(j))-\phi(a_j)"/></p>
+</div></li>
+<li><p class="first">Given:</p>
+<ul class="simple">
+<li>a vector of agent actions <img class="math" src="_images/math/7dd2a5ea01fbd72ad2a58dd1f3d6ecbfde6208a1.png" alt="a"/>,</li>
+<li>a government policy vector <img class="math" src="_images/math/5e87bf41a96deddf6cb485ff530f153f2590e9cc.png" alt="b"/>, and</li>
+<li>a vector of continuation payoffs <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/>,</li>
+</ul>
+<p>the vector of agents&#8217; expected payoffs is defined by</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/4a86127810949275ac0b4d597385bfa6e92a9686.png" alt="E(a,b,w):=((1-\delta)v_j(a,b)+\delta P^j(a_j)\cdot w)_{j\in \mathcal{Z}}."/></p>
+</div></div></blockquote>
+</li>
+</ul>
+<div class="section" id="outer-approximation-conceptual">
+<span id="outer-concept"></span><h2>10.1. Outer Approximation: Conceptual<a class="headerlink" href="#outer-approximation-conceptual" title="Permalink to this headline">¶</a></h2>
+<p>We can now define the outer approximation <img class="math" src="_images/math/a121de5b221e7b47be03fba4bb14ce587eb56bb7.png" alt="\mathbf{B}^o(\mathcal{W})"/>.</p>
+<ul>
+<li><p class="first">For each search subgradient <img class="math" src="_images/math/e9025a096548f35e4e1d43c4b73a73f92228abaf.png" alt="h_l\in H"/> and each partition element <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, let</p>
+<blockquote>
+<div><div class="math" id="equation-OuterBLP">
+<p><span class="eqno">(1)</span><img src="_images/math/35bd09c92d78fc9c2e24e2f72cd1e9fd990f00f7.png" alt="c^{o+}_l(k):=\max_{(a,b) \in A \times B,\lambda\in Q_k, w}&amp; [h_l \cdot E(a,b,w)],
+\\
+\text{s.t.}\,\,&amp;\lambda'=\lambda P(a),
+\\
+&amp; \lambda b^T \leq 0,
+\\
+&amp; w\in \tilde{\mathcal{W}}(\lambda', a),
+\\
+&amp; (1-\delta)\lambda \cdot v(a,b)+\delta \lambda' \cdot w\geq \check{\pi}_k,"/></p>
+</div></div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Then define</dt>
+<dd><div class="first last math">
+<p><img src="_images/math/8784e224a95d592ea15bba2dd3805f79f9e3c411.png" alt="\bar{\omega}^{o+}_k (\lambda) :=
+\begin{cases}
+\bigcap_{l=1}^L \{z\,|\, h_l\cdot z\leq  c^{o+}_l(k)\},&amp; \text{if} \ \lambda \in Q_k,\\
+\emptyset, &amp; \text{otherwise}.
+\end{cases}"/></p>
+</div></dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since <img class="math" src="_images/math/48f2ba18a697aa73bd790661c98a81f45906e2bb.png" alt="A \times B"/> is a finite set of action profiles, we can evaluate the program <a href="#equation-OuterBLP">(1)</a> as a special class of a nonlinear optimization problem&#8211;a <em>nonseparable</em> bilinear program (BLP)&#8211;for each fixed <img class="math" src="_images/math/6c2df4a2126e4bba657b6b86a8eb2ead025a8aba.png" alt="(a,b) \in A \times B"/>. Then we can maximize over the set <img class="math" src="_images/math/48f2ba18a697aa73bd790661c98a81f45906e2bb.png" alt="A \times B"/>, by table look-up.</p>
+</div>
+</div>
+<div class="section" id="outer-approximation-implementation">
+<h2>10.2. Outer Approximation: Implementation<a class="headerlink" href="#outer-approximation-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Now we deal with implementing the idea in <a class="reference internal" href="#outer-concept"><em>Outer Approximation: Conceptual</em></a>. The
+outer-approximation scheme to construct <img class="math" src="_images/math/0081013e3fa476125298ad13b49271c13a3d8beb.png" alt="\mathbf{B}^o(\mathcal{W}^o)"/> in
+the set of problems in <a href="#equation-OuterBLP">(1)</a> is computable by following the
+pseudocode below:</p>
+<div class="topic">
+<p class="topic-title first">Pseudocode</p>
+<blockquote>
+<div><p><strong>Input</strong>: <img class="math" src="_images/math/d7adf26843230213585e51635c5865a38492bac0.png" alt="H, c, \hat{\pi}, Poly"/></p>
+<div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/bf2d288b4398fa8fa32d44b2bdee9b94dc950499.png" alt="(Q_k,h_l,a) \in D \times H \times A"/>:</div>
+</div>
+<ul>
+<li><p class="first">Markov map <img class="math" src="_images/math/8de137a61a248056ac1cb050e8a11eefffa97283.png" alt="P \gets P(a)"/></p>
+</li>
+<li><p class="first">Simplex <img class="math" src="_images/math/e08d83815967809ddb2dbfd7f02ce8642719716e.png" alt="T \gets P(Q_k)"/></p>
+</li>
+<li><p class="first">Get Hit-and-Run uniform draws constrained to be in <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>: <img class="math" src="_images/math/688ed0d388d121cf6f673c380af42fc91e13eb69.png" alt="X:= \{ \lambda_n \}_{n=1}^{N_{sim}} \gets RandomPolyFill(N_{sim}, T)"/></p>
+</li>
+<li><p class="first">Get feasible set <img class="math" src="_images/math/2060e81697337bc16c2d4b546dad18dcb58b5cb7.png" alt="F \gets F(B,Q_k) := \{ ( \lambda, b) \in Q_k \times B  : \lambda \in X \subseteq Q_k,  -\lambda b^T \geq \mathbf{0} \}"/></p>
+</li>
+<li><p class="first">Get <img class="math" src="_images/math/a57c86187a430a18593d976f5f6000642172976b.png" alt="\mathbf{I}(a,k) := \{ k' \in \mathbf{K}: k' \mapsto Q_{k'}
+\in D, Q_{k'} \cap T \neq \emptyset"/> }</p>
+<blockquote>
+<div><ul class="simple">
+<li>Uses: <em>TriIndex</em> from <strong>Simplex_IntersectPmap</strong></li>
+</ul>
+<div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/341e56b915d45373070e88f93f0c8559a7e30bbb.png" alt="k' \in \mathbf{I}(a,k)"/>:</div>
+</div>
+<ul>
+<li><p class="first">Get relevant feasible policy set <img class="math" src="_images/math/4601a8f40d053139a269c8e705fc0ab55c0b3575.png" alt="F(k'; a,k) \gets \{ (\lambda,b) \in F : \lambda P \in Q_{k'} \}"/></p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/93fa476c61657ff449393888a8a201685dbfd187.png" alt="(\lambda,b) \in F(k';a,k)"/>:</div>
+</div>
+<ul class="simple">
+<li>Get current payoff profile <img class="math" src="_images/math/dcdeba92377b9df25431092d2b45d05dc1dd32e5.png" alt="v(a,b)"/></li>
+<li>Solve conditional LP:</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/98b7a6aa3ee1bdfd6371329bc3edbb27d044aeb8.png" alt="c_{+}^{o}(Q_k,h_l,a,k',\lambda,b) &amp;
+ = \max_{w} h_l [ (1-\delta)v(a,b) + \delta P w ]
+ \\
+ s.t. &amp;
+\\
+ H w &amp; \leq c^{o}(Q_{k'}, h_l)
+ \\
+ \delta[p^j(a')-p^j(a_j)]\cdot w &amp; \leq (1-\delta) [\phi(a')-\phi(a_j)], \  \forall j \in \mathcal{Z}
+ \\
+ -\lambda \delta P w &amp;
+ \leq \lambda [ (1-\delta)v(a,b) ] - \check{\pi}(Q_{k})"/></p>
+</div></div></blockquote>
+</li>
+<li><p class="first">Get <img class="math" src="_images/math/c96f2e6597e3bbce6f2c3a711f9dbc4f9101a394.png" alt="c_{+}^{o}(Q_k,h_l,a,k') = \max_{(\lambda,b) \in F(k';a,k)} c_{+}^{o}(Q_k,h_l,a, k',\lambda,b)"/>.</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Get <img class="math" src="_images/math/6ee71d2e1e24ad0be3e2b304a4a62d879a42ee43.png" alt="c_{+}^{o}(Q_k,h_l,a) = \max_{k' \in \mathbf{I}(a,k)} c_{+}^{o}(Q_k,h_l,a,k')"/>.</p>
+</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Get <img class="math" src="_images/math/12a5e0b13bafdb849047707f9ca09d1f2c3eefd7.png" alt="c_{+}^{o}(Q_k,h_l) = \max_{a \in A} c_{+}^{o}(Q_k,h_l,a)"/>.</li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>In the pseudocode, we can see that for every fixed <img class="math" src="_images/math/84c100f64efaac46918aac5034d05460e12e915e.png" alt="(Q_k,a,k') \in D
+\times A \times \mathbf{I}(a,k)"/> and every feasible <img class="math" src="_images/math/5e87bf41a96deddf6cb485ff530f153f2590e9cc.png" alt="b"/>, the nested family of programming problems are <em>nonseparable bilinear programs</em> (BLP) in the variables <img class="math" src="_images/math/54364905c753c97930790ae718b5117f824c23de.png" alt="(\lambda, w)"/>.</li>
+<li>The inner most loop thus implements our Monte Carlo approach to approximately
+solve for an <img class="math" src="_images/math/19bc0073dde1bcd1a8e6a32b251e80cced668f04.png" alt="\epsilon"/>-global solution to the <em>nonseparable</em> BLPs.</li>
+<li>Conditional on each draw of <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/>, this becomes a standard
+linear program (LP) in <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> within each innermost loop of the pseudocode.</li>
+<li>Given the set of subgradients <img class="math" src="_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/>, an outer-approximation update on the initial step
+correspondence <img class="math" src="_images/math/1cebd5121bbe28cc22927a002e86fe5deb133d03.png" alt="\mathcal{W}^o"/>, is now sufficiently summarized by
+<img class="math" src="_images/math/7d9d3518303ddc2988642818f07637359f725fb3.png" alt="\mathcal{W}^{o}_{+} = \mathbf{B}^o(\mathcal{W}^o) \gets (H,c_{+}^{o}(Q_k,h_l),\mathcal{W}^o)"/>.</li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="topic">
+<p class="topic-title first">Relevant functions <img class="math" src="_images/math/4e489a9cc4107ff2504d2d9dcf056de96d93c33a.png" alt="\blacktriangleright"/></p>
+<dl class="function">
+<dt id="Admit_Outer_LPset">
+<code class="descname">Admit_Outer_LPset</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#Admit_Outer_LPset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+<ul>
+<li><p class="first"><em>Cnew</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <img class="math" src="_images/math/2ce08b55d9dc8a61d35b05a4ad42e3a7b2d8a755.png" alt="(L \times K)"/> numeric array containing elements
+<img class="math" src="_images/math/aec92734df202280e187e61566137cdc820582ce.png" alt="c_{+}^{o}(Q_k,h_l)"/> where <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/> and <img class="math" src="_images/math/1786f6c0ab8c2b3ff3d00558223d69ca6096db11.png" alt="h_l \in
+H"/> are, respectively, a partition element of the correspondence
+domain <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>, and, search subgradient in direction indexed
+by <img class="math" src="_images/math/c3e0234e3e56458849584a4d216d3f8e32636d62.png" alt="l \in \{1,...,|H|\}"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><strong>Punish_Outer</strong></p>
+</div>
+</div>
+</div>
+<div class="section" id="inner-approximation-conceptual">
+<h2>10.3. Inner Approximation: Conceptual<a class="headerlink" href="#inner-approximation-conceptual" title="Permalink to this headline">¶</a></h2>
+<p>We now define the <em>inner approximation</em> of the SSE value correspondence operator as <img class="math" src="_images/math/633463b9b7c4850ec63581d1ccb0c9629ff49a69.png" alt="\mathbf{B}^i(\mathcal{W})"/> below.</p>
+<ul class="simple">
+<li>Denote <img class="math" src="_images/math/7d0af32f4b11e71f10f7caa45f0860ecff5060e8.png" alt="\tilde{H}(k)"/> as a finite set of <img class="math" src="_images/math/20c3bedc62699b232c0c47bafd91c9ef4c8c588f.png" alt="\tilde{L}(k)"/> spherical codes (to be used as <em>approximation subgradients</em>, where each
+element is <img class="math" src="_images/math/7541e8b20bdb7b30e720f7705d96f462efd38c61.png" alt="\tilde{h}_l (k)"/> and <img class="math" src="_images/math/fa52711bc6725edbcee456b032128ba730c47c80.png" alt="\| \tilde{h}_l (k) \|_2 = 1"/> for all
+<img class="math" src="_images/math/e92b5172f4af4af53cc7d8edab36d6a2a2f23404.png" alt="l = 1,...,\tilde{L}"/> and <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/>.</li>
+<li>Assume an initial inner step-correspondence approximation of some
+convex-valued and compact-graph correspondence</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/6afa2eefdf1c9b4ac2b25c25d98feebab53664a6.png" alt="\mathcal{W}^{i} := \bigcup_{Q_k \in D}  \bigcap_{\tilde{h}_l (k) \in \tilde{H}(k)}
+\left\{ z \in \mathbb{R}^{\mathcal{Z}} :
+\tilde{h}_l (k) z \leq c(Q_k,\tilde{h}_l) \right\}."/></p>
+</div><ul>
+<li><p class="first">Define another finite set of fixed <img class="math" src="_images/math/0a5711c7a37994043b2bc3bb374adca232491762.png" alt="L"/> <em>search subgradients</em>, made up also of
+spherical codes, <img class="math" src="_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/>, just as in the outer approximation method above. <a class="footnote-reference" href="#footnote-subgradients-inner" id="id2">[1]</a></p>
+</li>
+<li><p class="first">For each <em>search subgradient</em> <img class="math" src="_images/math/e9025a096548f35e4e1d43c4b73a73f92228abaf.png" alt="h_l\in H"/> and each partition element
+<img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, let</p>
+<blockquote>
+<div><div class="math" id="equation-InnerBLP">
+<p><span class="eqno">(2)</span><img src="_images/math/fa145bbb02432b8afe081cf7997990de8781dffe.png" alt="V^{i+}_l(k):=\min_{\lambda\in Q_k} \max_{(a,b) \in A \times B, w}&amp; [h_l \cdot E(a,b,w)],
+\\
+\text{s.t.}\,\,&amp;\lambda'=\lambda P(a),
+\\
+&amp; \lambda b^T \leq 0,
+\\
+&amp; w\in \tilde{\mathcal{W}^i}(\lambda',a),
+\\
+&amp; (1-\delta)\lambda \cdot v(a,b)+\delta \lambda' \cdot w\geq \hat{\pi}_k,"/></p>
+</div></div></blockquote>
+<p>Set <img class="math" src="_images/math/48e574c4b59eb689e4bfac6e0df450682eb40209.png" alt="V^{i+}_l(k) = -\infty"/> if the optimizer set is empty.</p>
+</li>
+<li><p class="first">In contrast to <a class="reference internal" href="#outer-concept"><em>Outer Approximation: Conceptual</em></a>, obtain the following additional
+step.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Let <img class="math" src="_images/math/addd70255ee6cb9ee064785b53c29def44235c5b.png" alt="(a_{l}^{\ast}(k), b_{l}^{\ast}(k), w_{l}^{\ast}(k))"/> denote the maximizers in direction <img class="math" src="_images/math/4ec64d1a3b6a4ec7631b359f805f35b15f61bd9d.png" alt="h_l"/> and over domain partition element <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, that induce the level <img class="math" src="_images/math/a5eff75e854ac84c333331d68571328de2447201.png" alt="V^{i+}_l(k)"/> above.</li>
+<li>Then the corresponding vector of agent payoffs is</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/93ae60ca2c146a4dedf871d73f5d65c4edf7c9bc.png" alt="z^{+}_l (k) := E(a_{l}^{\ast}(k), b_{l}^{\ast}(k), w_{l}^{\ast}(k))."/></p>
+</div><ul class="simple">
+<li>Define the set of vertices <img class="math" src="_images/math/68df2713bf823399866ab216062f484e4ef246fa.png" alt="Z(k) = \{ z^{+}_l (k) : l =
+1,...,L \}"/> and let <img class="math" src="_images/math/092dbdccbaa934e0fb07b99529bba66b0a2c9966.png" alt="\mathcal{W}^{i+}(k) = \text{co} (Z(k))"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Update</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/45c41908226d6a3a8be97391b8619d808e993343.png" alt="Z^{+}(k) = \left\{ z^{+}_l (k) \in Z(k) : z^{+}_l (k) \in \partial\mathcal{W}^{i+}(k) \right\};"/></p>
+</div></div></blockquote>
+<p>and find approximation subgradients <img class="math" src="_images/math/7f5600ad67429e616e178e27b828b201d99f0968.png" alt="\tilde{H}^{+}(k) = \{ \tilde{h}^{+}_1(k),...,\tilde{h}^{+}_{\tilde{L}^{+}}(k) \}"/> and constants <img class="math" src="_images/math/71f28260f42e952806fa17901abbb972cb77e35c.png" alt="C^{+}(k) = \{c^{+}_1(k),...,c^{+}_{\tilde{L}^+}(k) \}"/> such that</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/c149ad5b1d2b7719ac4d2dd8153d69bee915e461.png" alt="co(Z^{+}(k)) = \bigcap_{l=1}^{\tilde{L}^{+}} \left\{ z: \tilde{h}_l^{+}(k) z \leq
+c^{+}_l (k) \right\},"/></p>
+</div></div></blockquote>
+<p>and <img class="math" src="_images/math/1adc1e5d1ab52c69ac258939f87156ba3428e332.png" alt="\mathcal{W}^{i+} = \cup_{k} co(Z^{+}(k)) = \mathbf{B}^i (\mathcal{W}^i)"/>.</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>As in the <em>outer approximation</em> methods, since <img class="math" src="_images/math/48f2ba18a697aa73bd790661c98a81f45906e2bb.png" alt="A \times B"/> is a
+finite set of action profiles, we can evaluate the program <a href="#equation-InnerBLP">(2)</a>
+as a special class of a nonlinear optimization problem&#8211;a <em>nonseparable</em>
+bilinear program (BLP)&#8211;for each fixed <img class="math" src="_images/math/6c2df4a2126e4bba657b6b86a8eb2ead025a8aba.png" alt="(a,b) \in A \times B"/>. Then
+we can maximize over the set <img class="math" src="_images/math/48f2ba18a697aa73bd790661c98a81f45906e2bb.png" alt="A \times B"/>, by table look-up. Thus,
+the only difference computationally in the <em>inner approximation</em> method is
+the extra step of summarizing each inner step-correspondence <img class="math" src="_images/math/902a6f6b37c587842aaac346cba7d06eddd5f810.png" alt="\mathcal{W}^{i+}"/> by
+updates on:</p>
+<blockquote>
+<div><ul class="simple">
+<li>approximation subgradients in each <img class="math" src="_images/math/1d5d9f5fc1fbecd8a1e568c55ada398072566047.png" alt="\tilde{H}^{+}(k)"/>;</li>
+<li>levels in each <img class="math" src="_images/math/2e1ca97a5ac26650346565ec7063b16b9e8d3fba.png" alt="C^{+}(k)"/>; and</li>
+<li>vertices, <img class="math" src="_images/math/9b46db89d22c23c15cf490c196bca3b8b76263b2.png" alt="Z^{+}(k)"/>,</li>
+</ul>
+</div></blockquote>
+<p class="last">for every <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/>.</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="footnote-subgradients-inner" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>Note that we have to let the <em>approximation subgradients</em> <img class="math" src="_images/math/e40464868135663a264f71d368baa1d6bbb6a632.png" alt="\tilde{H}"/> to possibly vary with domain partition elements <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/>, as opposed to fixed <em>search subgradients</em> in <img class="math" src="_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/> used in the optimization step. This is because the former is endogenously determined by the extra convex hull operation taken to construct an inner step-correpondence <img class="math" src="_images/math/670af14dd4354d55512449a841c4b2ab1b9fb4d5.png" alt="\mathcal{W}^{i}"/> at each successive evaluation of the operator <img class="math" src="_images/math/c5337fd42a798a7e0b0521b70a0dc7b5d58a81f8.png" alt="\mathbf{B}^i"/>.</td></tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">Relevant functions <img class="math" src="_images/math/4e489a9cc4107ff2504d2d9dcf056de96d93c33a.png" alt="\blacktriangleright"/></p>
+<dl class="function">
+<dt id="Admit_Inner_LPset">
+<code class="descname">Admit_Inner_LPset</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#Admit_Inner_LPset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+<ul>
+<li><p class="first"><em>Znew</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <img class="math" src="_images/math/2ce08b55d9dc8a61d35b05a4ad42e3a7b2d8a755.png" alt="(L \times K)"/> numeric array containing elements
+<img class="math" src="_images/math/d4d80a2698799f7d27f3412531b882e89629cc5e.png" alt="z^{+}_l(k)"/> where <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/> and <img class="math" src="_images/math/0c46dbefcce26ba2406163862d54c4ed33792a2c.png" alt="l \mapsto h_l \in
+H"/> are, respectively, a partition element of the correspondence
+domain <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>, and, approximation subgradient in direction indexed
+by <img class="math" src="_images/math/54d0174800b90f8e44fb1407c30791d6cc6b418b.png" alt="l \in \{1,...,L\}"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><strong>Punish_Inner</strong></p>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<table class="docutils citation" frame="void" id="jyc2003" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[JYC2003]</a></td><td>Judd,  Kenneth L., Sevin Yeltekin and James Conklin (2003): &#8220;Computing Supergame Equilibria&#8221;. <em>Econometrica</em>, 71(4), 1239-1254.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sy2000" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[SY2000]</td><td>Sleet, Christopher and Sevin Yeltekin (2000): &#8220;On the Computation of Value
+Correspondences&#8221;. Unpublished. KGMS-MEDS, Northwestern University.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">10. Computing approximate SSE payoffs</a><ul>
+<li><a class="reference internal" href="#outer-approximation-conceptual">10.1. Outer Approximation: Conceptual</a></li>
+<li><a class="reference internal" href="#outer-approximation-implementation">10.2. Outer Approximation: Implementation</a></li>
+<li><a class="reference internal" href="#inner-approximation-conceptual">10.3. Inner Approximation: Conceptual</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="payoff_bilinear_punish.html"
+                        title="previous chapter">9. Punishment values and BLPs</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="payoff_bilinear_punish.html" title="9. Punishment values and BLPs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

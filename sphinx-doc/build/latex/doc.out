@@ -1,0 +1,25 @@
+\BOOKMARK [0][-]{chapter.1}{State Space}{}
+\BOOKMARK [1][-]{section.1.1}{Properties}{chapter.1}
+\BOOKMARK [0][-]{chapter.2}{Actions and Transitions}{}
+\BOOKMARK [0][-]{chapter.3}{Intersections with State-space Partitions}{}
+\BOOKMARK [1][-]{section.3.1}{Polytope intersection problems}{chapter.3}
+\BOOKMARK [0][-]{chapter.4}{Sampling on State-space Partitions}{}
+\BOOKMARK [0][-]{chapter.5}{State Space Computations}{}
+\BOOKMARK [1][-]{section.5.1}{Storage}{chapter.5}
+\BOOKMARK [1][-]{section.5.2}{Implementation}{chapter.5}
+\BOOKMARK [0][-]{chapter.6}{Equilibrium Payoff Correspondence}{}
+\BOOKMARK [1][-]{section.6.1}{Background}{chapter.6}
+\BOOKMARK [0][-]{chapter.7}{Approximating SSE operators}{}
+\BOOKMARK [1][-]{section.7.1}{Conceptual}{chapter.7}
+\BOOKMARK [1][-]{section.7.2}{Practical}{chapter.7}
+\BOOKMARK [0][-]{chapter.8}{Bilinear programs and SSE operator}{}
+\BOOKMARK [0][-]{chapter.9}{Punishment values and BLPs}{}
+\BOOKMARK [1][-]{section.9.1}{Implementing punishment values}{chapter.9}
+\BOOKMARK [0][-]{chapter.10}{Computing approximate SSE payoffs}{}
+\BOOKMARK [1][-]{section.10.1}{Outer Approximation: Conceptual}{chapter.10}
+\BOOKMARK [1][-]{section.10.2}{Outer Approximation: Implementation}{chapter.10}
+\BOOKMARK [1][-]{section.10.3}{Inner Approximation: Conceptual}{chapter.10}
+\BOOKMARK [0][-]{chapter.11}{Software}{}
+\BOOKMARK [0][-]{chapter.12}{Indices and tables}{}
+\BOOKMARK [0][-]{chapter*.19}{Bibliography}{}
+\BOOKMARK [0][-]{section*.33}{Index}{}

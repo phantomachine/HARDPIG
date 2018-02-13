@@ -1,0 +1,23 @@
+\begin{theindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter A
+  \item A\_ProfileSet() (built-in function), \hyperpage{5}
+  \item Admit\_Inner\_LPset() (built-in function), \hyperpage{30}
+  \item Admit\_Outer\_LPset() (built-in function), \hyperpage{29}
+
+  \indexspace
+  \bigletter P
+  \item Punish\_Inner() (built-in function), \hyperpage{26}
+  \item Punish\_Outer() (built-in function), \hyperpage{26}
+
+  \indexspace
+  \bigletter S
+  \item Simplex\_IntersectPmap() (built-in function), \hyperpage{15}
+  \item simplex\_tripart() (built-in function), \hyperpage{3}
+
+  \indexspace
+  \bigletter T
+  \item TransProbA() (built-in function), \hyperpage{5}
+
+\end{theindex}

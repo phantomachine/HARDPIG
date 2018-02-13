@@ -1,0 +1,26 @@
+\select@language {english}
+\contentsline {chapter}{\numberline {1}State Space}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Properties}{3}{section.1.1}
+\contentsline {chapter}{\numberline {2}Actions and Transitions}{5}{chapter.2}
+\contentsline {chapter}{\numberline {3}Intersections with State-space Partitions}{7}{chapter.3}
+\contentsline {section}{\numberline {3.1}Polytope intersection problems}{7}{section.3.1}
+\contentsline {chapter}{\numberline {4}Sampling on State-space Partitions}{9}{chapter.4}
+\contentsline {chapter}{\numberline {5}State Space Computations}{13}{chapter.5}
+\contentsline {section}{\numberline {5.1}Storage}{13}{section.5.1}
+\contentsline {section}{\numberline {5.2}Implementation}{13}{section.5.2}
+\contentsline {chapter}{\numberline {6}Equilibrium Payoff Correspondence}{17}{chapter.6}
+\contentsline {section}{\numberline {6.1}Background}{17}{section.6.1}
+\contentsline {chapter}{\numberline {7}Approximating SSE operators}{19}{chapter.7}
+\contentsline {section}{\numberline {7.1}Conceptual}{19}{section.7.1}
+\contentsline {section}{\numberline {7.2}Practical}{19}{section.7.2}
+\contentsline {chapter}{\numberline {8}Bilinear programs and SSE operator}{21}{chapter.8}
+\contentsline {chapter}{\numberline {9}Punishment values and BLPs}{23}{chapter.9}
+\contentsline {section}{\numberline {9.1}Implementing punishment values}{24}{section.9.1}
+\contentsline {chapter}{\numberline {10}Computing approximate SSE payoffs}{27}{chapter.10}
+\contentsline {section}{\numberline {10.1}Outer Approximation: Conceptual}{27}{section.10.1}
+\contentsline {section}{\numberline {10.2}Outer Approximation: Implementation}{28}{section.10.2}
+\contentsline {section}{\numberline {10.3}Inner Approximation: Conceptual}{29}{section.10.3}
+\contentsline {chapter}{\numberline {11}Software}{31}{chapter.11}
+\contentsline {chapter}{\numberline {12}Indices and tables}{33}{chapter.12}
+\contentsline {chapter}{Bibliography}{35}{chapter*.19}
+\contentsline {chapter}{Index}{37}{section*.33}

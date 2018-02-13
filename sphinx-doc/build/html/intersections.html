@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Intersections with State-space Partitions &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="4. Sampling on State-space Partitions" href="sampling.html" />
+    <link rel="prev" title="2. Actions and Transitions" href="actions_transitions.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="sampling.html" title="4. Sampling on State-space Partitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="actions_transitions.html" title="2. Actions and Transitions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="intersections-with-state-space-partitions">
+<h1>3. Intersections with State-space Partitions<a class="headerlink" href="#intersections-with-state-space-partitions" title="Permalink to this headline">¶</a></h1>
+<p>For every <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/> and its associated simplicial partition element <img class="math" src="_images/math/37f8905b7cd6d832916b6b16debc7cedfcc29edf.png" alt="Q_{k} \subset D"/> with
+positive volume, the
+set-valued image <img class="math" src="_images/math/f84693b39984d9645aea3d95062a5baafa3238b9.png" alt="P(a)(Q_{k})"/>:</p>
+<ol class="arabic">
+<li><p class="first">is another <img class="math" src="_images/math/bf44af9b73e4190e8c7cdeb52d0e1a2e254d9239.png" alt="N_{z}"/>-simplex contained in the unit <img class="math" src="_images/math/bf44af9b73e4190e8c7cdeb52d0e1a2e254d9239.png" alt="N_{z}"/>-simplex <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>; and</p>
+</li>
+<li><p class="first">intersects with:</p>
+<blockquote>
+<div><ul class="simple">
+<li>at least one partition element <img class="math" src="_images/math/d76c941ce1cb2487be0df78a36540e6d3a47d347.png" alt="Q_{k'}"/> where <img class="math" src="_images/math/b87e80476fea215d6575817ccf27c3d01eb4c2c7.png" alt="k' \in \mathbf{K}"/> and</li>
+<li>at most all partition elements <img class="math" src="_images/math/3060332a9600aca22bca1fa7ebbde6f29e5086c9.png" alt="Q_{1}, ..., Q_{K}"/>;</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<div class="section" id="polytope-intersection-problems">
+<span id="xpoly"></span><h2>3.1. Polytope intersection problems<a class="headerlink" href="#polytope-intersection-problems" title="Permalink to this headline">¶</a></h2>
+<p>Denote</p>
+<div class="math">
+<p><img src="_images/math/0dec8ed8a4b38a2f81d4c43ab0744e3b4b38ff48.png" alt="\mathbf{I}(a,k) := \left\{ k' \in \mathbf{K} :
+                           P(a)(Q_{k}) \cap Q_{k'} \neq \emptyset
+                   \right\},
+                   \qquad
+                   \forall a \in A, k \in \mathbf{K},"/></p>
+</div><p>as the sets of indexes to respective partition-elements&#8212;i.e. <img class="math" src="_images/math/c417f43cdc8f64ff4d920ad17cb5f14d556f14ca.png" alt="k'
+\mapsto Q_{k'}"/>&#8212;that contain non-empty
+intersections with each simplicial image <img class="math" src="_images/math/f84693b39984d9645aea3d95062a5baafa3238b9.png" alt="P(a)(Q_{k})"/>. Each nonempty
+intersection, induced by each <img class="math" src="_images/math/d1e9af74c859495b8488f1b694a36b2cf8478ef6.png" alt="(a,k) \in A \times \mathbf{K}"/> and <img class="math" src="_images/math/8b0022f31d20997d05884f5894566d3393ad0778.png" alt="P(a)"/>, is described by</p>
+<div class="math">
+<p><img src="_images/math/22f0cd6f0b7fb4b868637294a5f2f76a25f91463.png" alt="Poly_{k'(a,k)} := \left\{ \lambda' \in D :
+                             \lambda' \in P(a)(Q_{k}) \cap Q_{k'}
+                             \neq \emptyset
+                             \text{ and }
+                             k' \in \mathbf{I}(a,k)
+                     \right\}."/></p>
+</div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Each intersection <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/>, for each
+<img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/> and each <img class="math" src="_images/math/ee817a52ab06982a26bd5eeef7eb7b3b43c9c6e8.png" alt="a \in A"/>, is a
+<em>polytope</em>, and is <em>at least a simplex</em>, and is a subset of partition
+element <img class="math" src="_images/math/d76c941ce1cb2487be0df78a36540e6d3a47d347.png" alt="Q_{k'}"/>, where <img class="math" src="_images/math/c1530de3e71ba16744c571c5e29f960017ac08ca.png" alt="k' := k'(a,k)"/>.</p>
+</div>
+<p>These nonempty intersections are such that</p>
+<div class="math">
+<p><img src="_images/math/d690238b4d4f17d244594f3925ce1ebb3a85e5a0.png" alt="\bigcup_{k' \in \mathbf{I}(a,k)} Poly_{k'} :=: P(a)(Q_{k})."/></p>
+</div><div class="topic">
+<p class="topic-title first">Example</p>
+<p>If <img class="math" src="_images/math/2cab20097babe7c319d673061ef65c2c70532b68.png" alt="N_{z} = 3"/>, then <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> is a unit 2-simplex, and
+each <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/> can be a polygon or a triangular subset in <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Intersections with State-space Partitions</a><ul>
+<li><a class="reference internal" href="#polytope-intersection-problems">3.1. Polytope intersection problems</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="actions_transitions.html"
+                        title="previous chapter">2. Actions and Transitions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sampling.html"
+                        title="next chapter">4. Sampling on State-space Partitions</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="sampling.html" title="4. Sampling on State-space Partitions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="actions_transitions.html" title="2. Actions and Transitions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

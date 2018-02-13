@@ -1,0 +1,30 @@
+.. payoff_bilinear:
+
+.. default-domain:: mat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Bilinear programs and SSE operator %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Here we give an overview of our main computational insight and proposed method for constructing the operators :math:`\bar{\mathcal{W}}^o \mapsto \mathbf{B}^{o}(\bar{\mathcal{W}}^o)`, and :math:`\bar{\mathcal{W}}^i \mapsto \mathbf{B}^{i}(\bar{\mathcal{W}}^i)`.
+
+Given a candidate correspondence :math:`\mathcal{W}`, evaluating the *symmetric sequential equilibrium* (SSE) operator at this point in the set of compact and convex-valued correspondences (see Definition 3 in the paper), :math:`\mathbf{B}(\mathcal{W})`, will involve:
+
+#. Calculating state-dependent max-min punishment values,
+   :math:`\pi(\lambda) := \max_{b} \pi(\lambda,b)`.
+
+    * We show that this is amenable to a *separable* bilinear program (BLP).
+
+    * We will describe how these BLPs are solved to :math:`\epsilon`-global optimality.
+
+#. Given :math:`\pi (\lambda)`, compute the total-payoff sets supported by action-states-continuation-value tuples, :math:`(b,a,\lambda,w)`, that are *admissible* with respect to :math:`\mathcal{W}`: 
+
+   * We will show that this consists of subproblems that are *non-separable*
+     BLPs.
+
+   * These can be solved by a specific stochastic global optimization problem
+     that involves sub-problems that are *linear programs* (LP).
+
+We adapt Steps 1 and 2 above for both outer- and inner-approximations, respectively, yielding  approximate outer- and inner evaluations of the step-correspondence images
+:math:`\mathbf{B}^{o}(\bar{\mathcal{W}}^{o})` and :math:`\mathbf{B}^{i}(\bar{\mathcal{W}}^{i})`.
+
+

@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Sampling on State-space Partitions &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="5. State Space Computations" href="compute_statespace.html" />
+    <link rel="prev" title="3. Intersections with State-space Partitions" href="intersections.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="compute_statespace.html" title="5. State Space Computations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intersections.html" title="3. Intersections with State-space Partitions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sampling-on-state-space-partitions">
+<h1>4. Sampling on State-space Partitions<a class="headerlink" href="#sampling-on-state-space-partitions" title="Permalink to this headline">¶</a></h1>
+<p>We will be drawing uniform sample vectors of the variable <img class="math" src="_images/math/1bf723934493c36214407e0bfd3036a66b910892.png" alt="\lambda \in D"/> from each partition element <img class="math" src="_images/math/8320a118cc3de95f936536535a32299e257bab10.png" alt="Q_{k},k \in \mathbf{K}"/> of the domain <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>. And then we will also use this in conjunction with the <a class="reference internal" href="intersections.html#xpoly"><em>Polytope intersection problems</em></a>.</p>
+<p>Each partition element in general is a tetrahedron simplex. We utilize a modified Markov-chain Monte Carlo sampler called the <strong>Hit-and-Run Algorithm</strong>, originally due to <a class="reference internal" href="#smi1984" id="id1">[Smi1984]</a>. This algorithm has a desirable property that it can (globally) reach any point in any arbitrarily given bounded set in <img class="math" src="_images/math/8305a1ff737d7c82636c29557804352a23327c11.png" alt="\mathbb{R}^n"/> in one step. That is, there is a positive probability of sampling from any neighborhood in that set. Moreover, it is proven by <a class="reference internal" href="#lov1999" id="id2">[Lov1999]</a> that the Hit-and-Run sampler converges fast (in probability) to a uniform distribution on convex bodies <img class="math" src="_images/math/0feefe4111cf58801cfaf2f9044f3927cd6d2da5.png" alt="Q_k \subset \mathbb{R}^n"/>. <a class="footnote-reference" href="#footnote-hitandrun" id="id3">[1]</a> <a class="reference internal" href="#lv2003" id="id4">[LV2003]</a> note that this algorithm is the fastest in practice.</p>
+<div class="topic">
+<p class="topic-title first">Hit-and-Run Algorithm</p>
+<p>Let <img class="math" src="_images/math/c8c5f8e1735b121a007c572b80a6cec2d4793a5f.png" alt="S \subset \mathbb{R}^n"/> be a convex region that restricts sample
+realizations.
+The aim is to generate sample <img class="math" src="_images/math/cb41f9e84785db6658c2cbd3d71871bd6e616545.png" alt="X := \{ s_m \}_{m=1}^{N_{sim}}"/> as a Markov Chain that is (asymptotically) uniformly distributed on <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>. Define <img class="math" src="_images/math/badd5795b88097eceb1d0549b06c97b8f1a4b234.png" alt="f(s)"/> by <em>any</em> continuous and strictly positive probability density function (pdf) on <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>.</p>
+<ul class="simple">
+<li>Start at a given point <img class="math" src="_images/math/6859317dd1b439cef34131bcd4bafee8393444e0.png" alt="s"/> in the given set <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>. Let
+<img class="math" src="_images/math/f821b8269d5572ef3cf71f11b921cb630794ab27.png" alt="m=1"/>.</li>
+<li>Propose a new location <img class="math" src="_images/math/b03c57e96682f0ed44683cc52e035dc01cd4beb5.png" alt="s' = s + l d"/> by stepping away from <img class="math" src="_images/math/6859317dd1b439cef34131bcd4bafee8393444e0.png" alt="s"/>
+according to a random direction-stepsize pair, <img class="math" src="_images/math/ec05dedaf6a01869a66e265ad1fa128025f47fea.png" alt="(d,l)"/>, where the
+direction <img class="math" src="_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> is uniformly distributed on the unit hypersphere
+<img class="math" src="_images/math/a0709b04a852320d10b02d838fa76b88e33c8b2c.png" alt="\mathbb{S}^{n-1}"/> embedded in
+<img class="math" src="_images/math/8305a1ff737d7c82636c29557804352a23327c11.png" alt="\mathbb{R}^n"/>; and the stepsize <img class="math" src="_images/math/bff1c86d13c75c7df0a2e02d262a5ce795599f4e.png" alt="l \in \mathbb{R}"/> is drawn
+from a <em>proposal density</em> <img class="math" src="_images/math/a66f0b63364455fdec491dbde61bb72bdf736e90.png" alt="g_m(l | d, s)"/>.</li>
+<li>Accept proposal move to <img class="math" src="_images/math/d4a0aed58a19ad4de9fde399d3ebb91d5f3bac94.png" alt="s'"/> with <em>acceptance probability</em>
+<img class="math" src="_images/math/5e41180dd420d88872e8cdb637f802195cf29de2.png" alt="\tilde{\alpha}_f(s,s')"/>, or, reject and stay at <img class="math" src="_images/math/6859317dd1b439cef34131bcd4bafee8393444e0.png" alt="s"/> (i.e. set <img class="math" src="_images/math/213d0b72816beca73b2d2b0fea48f457caf9e2a3.png" alt="s' = s"/>) with probability
+<img class="math" src="_images/math/6f78d764749925556aeb043b71ea7451628e14fa.png" alt="1-\tilde{\alpha}_f(s,s')"/>.</li>
+<li>Then set <img class="math" src="_images/math/6687ddc788adfd9fdfca2e2d0944e867147232bc.png" alt="s_{m+1}"/> as <img class="math" src="_images/math/d4a0aed58a19ad4de9fde399d3ebb91d5f3bac94.png" alt="s'"/>, and, repeat the procedure again from
+the first step, and let <img class="math" src="_images/math/92e465e3f6efb64b4d642c5932c6148cd5f7d2c3.png" alt="m = m + 1"/>.</li>
+</ul>
+</div>
+<p>To implement this simple algorithm, we need to define the functions <img class="math" src="_images/math/72db189225fcd1b8892a5adb61795d2a4da48323.png" alt="\{ g_m(\cdot | d,s) : m \geq 1 \}"/>, and <img class="math" src="_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> (which implies <img class="math" src="_images/math/e58bdc6233303c38ad62f472804754f377ecc914.png" alt="\tilde{\alpha}_f"/>) to ensure the necessary and sufficient (Kolmogorov) detailed balance condition holds (for the chain to be a <em>reversible Markov chain</em>):</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/f44430a1b33e6a0d7abaed981c767ae738bffe14.png" alt="g_m \left( \| s - s' \| ; \frac{s' - s}{\| s - s' \|}, s
+\right) \tilde{\alpha}_f(s,s')f(s) =
+g_m \left( \| s - s' \| ; \frac{s - s'}{\| s - s' \|}, s'
+\right) \tilde{\alpha}_f(s',s)f(s')."/></p>
+</div></div></blockquote>
+<p>This demands that the products of probabilities around every closed loop are the same in both directions around the loop.</p>
+<ul>
+<li><p class="first">We can define <img class="math" src="_images/math/badd5795b88097eceb1d0549b06c97b8f1a4b234.png" alt="f(s)"/> by <em>any</em> continuous and strictly positive
+probability density function (pdf) on <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>.</p>
+</li>
+<li><p class="first">Let <img class="math" src="_images/math/f43c6278fec486223eb47755a5bc267132907466.png" alt="L_m := \left\{ l \in \mathbb{R} : s_m + l d_m \in S
+\right\}"/>. Define a conditional <em>proposal density</em> for each step <img class="math" src="_images/math/09c65e30b4131019f0a04fcadacd3888a555c173.png" alt="m = 1,...,N_{sim}"/> by <img class="math" src="_images/math/1848234f8924240aa3753fd6c4c04a2de542dbb9.png" alt="g_m ( l | d, s)"/>.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Proposal densities that satisfy the <em>detailed balance condition</em> include the class of symmetric proposal density&#8212;i.e. <img class="math" src="_images/math/19e66afbe1e8f6d5f39b0e400921b914fbbe3e7f.png" alt="g_m ( l | d, s) = \tilde{g}_m (l) = \tilde{g}(-l)"/> for all <img class="math" src="_images/math/bff1c86d13c75c7df0a2e02d262a5ce795599f4e.png" alt="l \in \mathbb{R}"/>,  in which case</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/ebfee2e26d761092f6d18d69ba5303ce932c6be7.png" alt="\tilde{\alpha}(s,s') = \min \left\{ \frac{f(s')}{f(s)} ,
+1\right\}."/></p>
+</div></div></blockquote>
+</li>
+<li><p class="first">Since we have also <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> bounded, we can define a valid proposal
+density as</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/dbc7206c27e1d4858cdfa954265659e106138434.png" alt="\tilde{g}_m (l) =  \frac{ \mathbf{1}_{ \{ l \in L_m \} } }{ \int_{\mathbb{R}} \mathbf{1}_{\{ u \in L_m \} } du }."/></p>
+</div></div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="topic">
+<p class="topic-title first">Example</p>
+<p>In our application, we will define a <img class="math" src="_images/math/ba20a008ca91a0598138cceee7d9e545ac9dd434.png" alt="S := Q_k"/> for every <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/>.</p>
+</div>
+<p>See Section 6.3.1 of <a class="reference internal" href="#ktb2011" id="id5">[KTB2011]</a> for a generalized version of this simple algorithm.</p>
+<div class="topic">
+<p class="topic-title first">Looking ahead</p>
+<p>Here we give a preview of the usage of uniform sampling from the convex partition elements. In <a class="reference internal" href="payoff_approximation.html"><em>Equilibrium Payoff Correspondence</em></a> later, we show that in our class of dynamic games,
+the description of the <em>symmetric sequential equilibrium</em> operator (which is correspondence valued) involves solving many <em>non-separable</em> bilinear programs (BLP) of the form:</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/ec69e04ac3da4933d2e87ed0737365ba0af4ed7e.png" alt="\begin{eqnarray*}
+\max_{\lambda,w} &amp; u^{T} + \lambda^{T} Q w
+\\
+s.t. &amp; \lambda \in \mathcal{F}_1(w),
+\\
+     &amp; w \in \mathcal{F}_2(\lambda);
+\end{eqnarray*}"/></p>
+</div></div></blockquote>
+<p>where <img class="math" src="_images/math/477d3cb734de17d286ae331ff92c66865a214d8f.png" alt="u \in  \mathbb{R}^{N_{z}}"/> is a vector of constants; <img class="math" src="_images/math/fd4ed15697a3baa67d0aa75d171f2c30bd843be1.png" alt="\lambda,w \in \mathbb{R}^{N_{z}}"/> are the variables of interest; <img class="math" src="_images/math/7b1816c51f7d31275cd3ad400208fb7b3ce136a0.png" alt="Q"/> is some <img class="math" src="_images/math/20ec8e21e7362be64ce69410249ed1cde1662672.png" alt="(N_z \times N_z)"/> real matrix; and the constraint sets <img class="math" src="_images/math/bb42e5b9d2e3b3f816947847e9fec98a77eab2f0.png" alt="\mathcal{F}_1(w)"/> and <img class="math" src="_images/math/6de824e1f897e8649436249f1b200e4b6a340eac.png" alt="\mathcal{F}_2(\lambda)"/> are convex polytopes which, respectively, depend on the choices of <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> and <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/>. <a class="footnote-reference" href="#footnote-nonseparable-bilinear" id="id6">[2]</a> <a class="footnote-reference" href="#footnote-nonseparable-bilinear-source" id="id7">[3]</a></p>
+<p>We propose a Monte Carlo or stochastic approach to obtain <img class="math" src="_images/math/19bc0073dde1bcd1a8e6a32b251e80cced668f04.png" alt="\epsilon"/>-global (i.e. approximately global) optimization solutions to these non-separable bilinear programs. For now, notice that for each given realization of the random vector <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/>, the nonseparable  BLP above can be reduced to standard linear programs (LP) in the variable <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/>. <a class="footnote-reference" href="#footnote-feasible-lambdas" id="id8">[4]</a></p>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="footnote-hitandrun" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[1]</a></td><td><a class="reference internal" href="#lov1999" id="id9">[Lov1999]</a> proves that the upper bound on the convergence rate is in
+polynomial time of <img class="math" src="_images/math/7d161158a4ef3cf0b578e4973d587d8efef0f89a.png" alt="\mathcal{O}(n^3)"/>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="footnote-nonseparable-bilinear" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[2]</a></td><td>A special (and textbook case) is where <img class="math" src="_images/math/1cd6be26f5e2ddb3268c339e3502c186f7d311ce.png" alt="\mathcal{F}_1(w) \equiv \mathcal{F}_1"/> and <img class="math" src="_images/math/a69360e44f416ce153c98b134b1049b41ef37b9a.png" alt="\mathcal{F}_2(\lambda) \equiv \mathcal{F}_2"/>&#8212;i.e. each constraint set <img class="math" src="_images/math/eb6ad7ee6dd28fb77290d4a09b0604994fbc5bc8.png" alt="\mathcal{F}_1"/> and <img class="math" src="_images/math/87c66ccc5e08e95f7ac6a04f631b28217086f751.png" alt="\mathcal{F}_2"/> do not vary, respectively, with the choice variables <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> and <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/>. This special case is known as a <em>separable bilinear</em> program, and, it nests quadratic programming as another special case. These problems are known to have a global solution&#8211;see <a class="reference internal" href="#bm1993" id="id10">[BM1993]</a>. Furthermore, successive approximation using branching-and-bounding methods&#8211;i.e. branching into subsets of the optimizer domain, then bounding the value function below by the solutions of linear programs on each subset of the function domain, and, above by the value from a local nonlinear optimizer&#8211;can be used to find the <img class="math" src="_images/math/19bc0073dde1bcd1a8e6a32b251e80cced668f04.png" alt="\epsilon"/>-global optimum: <a class="reference internal" href="#mcc1976" id="id11">[McC1976]</a> , <a class="reference internal" href="#bm1993" id="id12">[BM1993]</a> and <a class="reference internal" href="#ht1996" id="id13">[HT1996]</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="footnote-nonseparable-bilinear-source" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[3]</a></td><td>In the paper, we noted that in this class of games, the <em>source of
+bilinear nonseparability in the constraint sets</em> of <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> and <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> is
+the utilitarian government&#8217;s set of <em>incentive</em> or <em>promise-keeping</em> constraints.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="footnote-feasible-lambdas" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[4]</a></td><td>Note that by fixing each <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/>, the constraint set <img class="math" src="_images/math/bb42e5b9d2e3b3f816947847e9fec98a77eab2f0.png" alt="\mathcal{F}_1(w)"/> will be redundant in the LP formulation within the stochastic global optimization scheme. Additionally, we will also require each realization <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> to be feasible according to some feasibility (e.g. a budget-balance) requirement(s): <img class="math" src="_images/math/8ab70008bf28ba6e0e3308ac2cf1ba090cf53c4a.png" alt="\lambda \in \mathcal{F}(Q_k) := \{ \lambda \in Q_k : \lambda b^{T} \geq 0, \forall b \in B \}"/>, where <img class="math" src="_images/math/83956e92fcc80dee17fce864543216939a3c9da7.png" alt="B"/> is some finite set of action profiles of the large (government) player.</td></tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">Example (Sampling from <img class="math" src="_images/math/7280907e16536ac3195d9f5ae85f25bfdd5a94e9.png" alt="Q_k"/> and <img class="math" src="_images/math/1031bde7e01f64cb2b1ce2184262847cb6fc419c.png" alt="Poly_{k'}"/>)</p>
+<p>The following figure (<a class="reference internal" href="#figure-intersectsim"><em>Uniform samples and various polytope intersections </em></a>) shows an example of our usage of the Hit-and-Run algorithm in conjunction with our polytope intersection problems described earlier. For example, consider the (4,1)-panel in this figure. It shows the realizations of the random vectors <img class="math" src="_images/math/219b1f198c33ed8b972f03f5842e3d286c95b03d.png" alt="\lambda P(a)"/>, where <img class="math" src="_images/math/3555032cfb674a6da4ed7a8da26376b28e94e246.png" alt="a = 4"/> denotes the fourth action profile in <img class="math" src="_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/>, that would end up in the various partition elements of <img class="math" src="_images/math/645fef5daf1bb8c4b817b44a55cfc83f214865bf.png" alt="(Q_3, Q_4, Q_5, Q_8)"/>, and given that each vector <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is randomly drawn from the set <img class="math" src="_images/math/21e74fca9119575f04258dec500fcbeb07741779.png" alt="Q_9"/>.</p>
+</div>
+<div class="align-center figure" id="id14">
+<span id="figure-intersectsim"></span><a class="reference internal image-reference" href="_images/intersectsim_a4.png"><img alt="Uniform samples of partitions" src="_images/intersectsim_a4.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Uniform samples and various polytope intersections <img class="math" src="_images/math/85693285e95f60a5e145474dba1dfbe8f06c93b6.png" alt="(P(a_{4}), N_z = 3, K = 16)"/></span></p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<table class="docutils citation" frame="void" id="bm1993" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[BM1993]</td><td><em>(<a class="fn-backref" href="#id10">1</a>, <a class="fn-backref" href="#id12">2</a>)</em> Bennett, Kristin and Olvi L. Mangasarian (1993): &#8220;Bilinear Separation of Two Sets in n-Space&#8221;. <em>Computational Optimization and Applications</em>, 2.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ht1996" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[HT1996]</a></td><td>Horst, Reiner and Hoang Tuy (1996): &#8220;Global Optimization: Deterministic
+Approaches&#8221;. Springer Verlag.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ktb2011" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[KTB2011]</a></td><td>Kroese, Dirk P., Thomas Taimre and Zdravko I. Botev (2011): <em>Handbook of
+Monte Carlo Methods</em>. Wiley Series in Probability and Statistics. Wiley.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lov1999" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Lov1999]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id9">2</a>)</em> Lovasz, Laszlo (1999): &#8220;Hit-and-run Mixes Fast&#8221;. <em>Mathematical Programming</em>, Ser. A 86, 443-461.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lv2003" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[LV2003]</a></td><td>Lovasz, Laszlo and Santosh Vempala (2003): &#8220;Hit-and-Run is Fast and Fun&#8221;,
+Technical Report, Microsoft Research, MSR-TR-2003-05.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="mcc1976" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[McC1976]</a></td><td>McCormick, Garth P. (1976): &#8220;Computability of Global Solutions to Factorable Nonconvex Programs: Part I. Convex underestimating problems&#8221;. <em>Mathematical Programming</em>, 10, 147–175.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="smi1984" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[Smi1984]</a></td><td>Smith, Robert L. (1986): &#8220;Efficient Monte-Carlo Procedures for Generating Points Uniformly Distributed over Bounded Regions&#8221;. <em>Operations Research</em>, 32, 1296-1308.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intersections.html"
+                        title="previous chapter">3. Intersections with State-space Partitions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compute_statespace.html"
+                        title="next chapter">5. State Space Computations</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="compute_statespace.html" title="5. State Space Computations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intersections.html" title="3. Intersections with State-space Partitions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

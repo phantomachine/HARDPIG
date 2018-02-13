@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. Punishment values and BLPs &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="10. Computing approximate SSE payoffs" href="payoff_compute.html" />
+    <link rel="prev" title="8. Bilinear programs and SSE operator" href="payoff_bilinear.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="payoff_compute.html" title="10. Computing approximate SSE payoffs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="payoff_bilinear.html" title="8. Bilinear programs and SSE operator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="punishment-values-and-blps">
+<h1>9. Punishment values and BLPs<a class="headerlink" href="#punishment-values-and-blps" title="Permalink to this headline">¶</a></h1>
+<p>The first step is to construct punishment values over each partition element
+of the state space. This will turn out to be amenable to <em>separable bilinear
+programming</em> formulations.</p>
+<p>Punishment payoffs for the large player <img class="math" src="_images/math/b92c09a649305a0aef3239729d93cdf941e0e5cf.png" alt="G"/> are constructed as follows.</p>
+<ul>
+<li><p class="first">For each <img class="math" src="_images/math/c7acb701be78fc9a539efc3b6fcc7c4e96a1f1cb.png" alt="a\in A"/>, define a correspondence <img class="math" src="_images/math/943c6bdb30c0dd0957eb29e7c1805f3fbf73687c.png" alt="\tilde{{\mathcal{W}}}:D\times A \rightrightarrows \mathbb{R}^\mathcal{Z}"/> by</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/5e894d7ccc623debf735202b3a25390a7782fa74.png" alt="\begin{align*}
+\tilde{{\mathcal{W}}}(\lambda',a)&amp;:=\{w\in {\mathcal{W}}(\lambda')\,|\, \forall j\in \mathcal{Z}, \forall a'\in \tilde{A}
+\\
+&amp; \delta[p^j(a')-p^j(a_j)]\cdot w\leq (1-\delta) [\phi(a')-\phi(a_j)]\}.
+\end{align*}"/></p>
+</div></div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Note <img class="math" src="_images/math/7b7b05fe7afe5ce66fa718698ec7f562618e45ef.png" alt="\tilde{\mathcal{W}}"/> encodes two requirements:</p>
+<ul class="last simple">
+<li>Continuation values <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> must be <em>consistent</em> with the set <img class="math" src="_images/math/9c7a7840ddd14432ca43c78d659564ea293c802d.png" alt="\tilde{\mathcal{W}}(\lambda')"/> where <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> itself enforces the action-continuation-state profile pair <img class="math" src="_images/math/7b7244bad6ffa3104e59df9e332419232bd492d4.png" alt="(a,\lambda') \equiv (a,\lambda P(a))"/>; and</li>
+<li>individually, the action-and-promised-value pair <img class="math" src="_images/math/de950bbea25fc4fed761e31dc3a9fcddea410599.png" alt="(a_j, w_j)"/>
+are optimal (i.e. &#8220;incentive compatible&#8221;).</li>
+</ul>
+</div>
+</li>
+<li><p class="first">Next, construct government punishment vectors</p>
+<ul class="simple">
+<li><img class="math" src="_images/math/4359f73a5cd84e4fbecdbcc10ff7d3343400008d.png" alt="(\check{\pi}_k)_{k=1}^K"/>, and</li>
+<li><img class="math" src="_images/math/078f8b92411480cd9f4a6448ddb28e0becba433a.png" alt="(\hat{\pi}_k)_{k=1}^K"/></li>
+</ul>
+<dl class="docutils">
+<dt>by letting</dt>
+<dd><div class="first last math" id="equation-pival_k">
+<p><span class="eqno">(1)</span><img src="_images/math/9d17c1e20d41c6678daaa712c3770fef48bbbc7d.png" alt="\pi(\lambda):=\max_{b\in B} \min_{a,\lambda',w}&amp;[(1-\delta)\lambda\cdot v(a,b)+\delta \lambda'\cdot w],\\
+\text{s.t.}\,\,&amp; \lambda'=\lambda P(a),\\
+&amp; -\lambda b^T \geq 0,\\
+&amp; w\in \tilde{{\mathcal{W}}}(\lambda',a),"/></p>
+</div></dd>
+</dl>
+<p>Then define: <img class="math" src="_images/math/02b553ec159ca281e0b494700503d6da6f139983.png" alt="\check{\pi}_k:=\min_{\lambda\in Q_k}\pi(\lambda)"/> and <img class="math" src="_images/math/b28e8e774c8dbe38af0fed65d1b2979b2588ddd4.png" alt="\hat{\pi}_k:=\max_{\lambda\in Q_k}\pi(\lambda)"/>.</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="simple">
+<li>If <img class="math" src="_images/math/f890433f8bb736b52fc8dff84cf801deef96b9f6.png" alt="\mathcal{W}(\lambda')"/> is defined as a convex polytope, then <img class="math" src="_images/math/bf8ca3ccc7739330de263d13690069341889cf6d.png" alt="\tilde{\mathcal{W}}(\lambda',a)"/> is also a convex polytope.</li>
+<li>Given <img class="math" src="_images/math/6c2df4a2126e4bba657b6b86a8eb2ead025a8aba.png" alt="(a,b) \in A \times B"/>, the minimization program <a href="#equation-pival_k">(1)</a> is a mild nonlinear programming problem&#8211;i.e. a <em>separable bilinear programming formulation</em>&#8211;of the following generic form</li>
+</ul>
+<div class="math" id="equation-BPseparable">
+<p><span class="eqno">(2)</span><img src="_images/math/893bf61108367c421b8cb90c13684b0160eaac7a.png" alt="\min_{\lambda,w} &amp; u^{T} + \lambda^{T} Q w
+\\
+s.t. &amp; \lambda \in \mathcal{F}_1,
+\\
+&amp; w \in \mathcal{F}_2."/></p>
+</div><ul class="last simple">
+<li>Moreover, <img class="math" src="_images/math/eb6ad7ee6dd28fb77290d4a09b0604994fbc5bc8.png" alt="\mathcal{F}_1"/> and <img class="math" src="_images/math/87c66ccc5e08e95f7ac6a04f631b28217086f751.png" alt="\mathcal{F}_2"/> are disjoint convex and bounded polytopes.</li>
+</ul>
+</div>
+<div class="topic">
+<p class="topic-title first">Existence of Optimum</p>
+<p>If <img class="math" src="_images/math/86b53a99470bfe410dd9108afdb7a4464f2461fb.png" alt="F_1"/> and <img class="math" src="_images/math/9f5a7711ff9b816f6311b40717a37c66192ed149.png" alt="F_2"/> are bounded then there exists an optimal solution of <a href="#equation-BPseparable">(2)</a>, <img class="math" src="_images/math/d5e2d4dedabcf2a0015834ee76590764ae0279b1.png" alt="(\lambda^{\ast}, w^{\ast})"/>, such that <img class="math" src="_images/math/9b0ce9635a10e54a8172eb6c4c1d1155caa85e9b.png" alt="\lambda^{\ast} \in \mathcal{F}_1"/> and <img class="math" src="_images/math/c5ea3d953cf9d1edb5d4586b51364df40533b9a9.png" alt="w \in \mathcal{F}_2"/>.</p>
+<p>See <a class="reference internal" href="#hpt2000" id="id1">[HPT2000]</a> or <a class="reference internal" href="sampling.html#ht1996" id="id2">[HT1996]</a>.</p>
+</div>
+<div class="topic">
+<p class="topic-title first">Separable BLP is NP-complete</p>
+<p>A bilinear program can be solved in NP time.</p>
+<p>See <a class="reference internal" href="#man1995" id="id3">[Man1995]</a>.</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Assume that we are solving the minimization problem in <a href="#equation-BPseparable">(2)</a>. We employ a well-known deterministic global optimization algorithm known as branch-and-bound (BNB). First, a <em>relaxation</em> of the bilinear program is solved. Typically, this is done by solving inexpensive LPs. <a class="reference internal" href="#cm2009" id="id4">[CM2009]</a> The solution of the relaxed problem yields a lower bound on the globally optimal solution which is a convex lower envelope. The relaxation is then iteratively refined, by refining the domain (feasible sets) and successively eliminating dominated local optima. (This is also a common method in solving integer linear programs.) An upper bound estimate of the optima can be found by using local nonlinear solvers (e.g. SNOPT and IPOPT) over each branch. Thus we have successively improved branching partitions of the domain (i.e. <em>branching</em>) and lower- and upper-bounding estimates (i.e. <em>bounding</em>) of the <img class="math" src="_images/math/19bc0073dde1bcd1a8e6a32b251e80cced668f04.png" alt="\epsilon"/>-global optimum.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The BNB algorithm we use follows <a class="reference internal" href="sampling.html#mcc1976" id="id5">[McC1976]</a> and is implemented through the
+Bilinear Matrix Inequality BNB interface (BMIBNB) available in Stefan
+Lofberg&#8217;s <a class="reference external" href="http://users.isy.liu.se/johanl/yalmip/pmwiki.php?n=Solvers.BMIBNB">YALMIP</a>. To solve the local lower-bounding LPs, we use the <a class="reference external" href="http://www.gnu.org/software/glpk/">GNU GLPK</a> open-source optimizer and to solve the upper-bounding nonlinear programs, we use either <a class="reference external" href="http://www.sbsi-sol-optimize.com/asp/sol_products_snopt_desc.htm">SNOPT</a> or <a class="reference external" href="https://projects.coin-or.org/Ipopt">IPOPT</a>.</p>
+</div>
+<div class="section" id="implementing-punishment-values">
+<h2>9.1. Implementing punishment values<a class="headerlink" href="#implementing-punishment-values" title="Permalink to this headline">¶</a></h2>
+<p>The following pseudocode implements the punishment calculations for the
+outer-approximation scheme:</p>
+<div class="topic">
+<p class="topic-title first">Pseudocode</p>
+<blockquote>
+<div><p><strong>Input</strong>: <img class="math" src="_images/math/c64987d2e440bf65c4936ad912f8d10ae9198e89.png" alt="H, c, PolyLcons"/></p>
+<div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/54aa3a2fdc081309d393391cb819a14a6fc1419b.png" alt="(Q_k,a,b) \in D \times A \times B"/>:</div>
+</div>
+<ul>
+<li><p class="first">Markov map <img class="math" src="_images/math/8de137a61a248056ac1cb050e8a11eefffa97283.png" alt="P \gets P(a)"/></p>
+</li>
+<li><p class="first">Simplex <img class="math" src="_images/math/e08d83815967809ddb2dbfd7f02ce8642719716e.png" alt="T \gets P(Q_k)"/></p>
+</li>
+<li><p class="first">Get <img class="math" src="_images/math/a57c86187a430a18593d976f5f6000642172976b.png" alt="\mathbf{I}(a,k) := \{ k' \in \mathbf{K}: k' \mapsto Q_{k'}
+\in D, Q_{k'} \cap T \neq \emptyset"/> }</p>
+<blockquote>
+<div><ul class="simple">
+<li>Uses: <em>xTriIndex</em> from <strong>Simplex_IntersectPmap</strong></li>
+</ul>
+<div class="line-block">
+<div class="line"><strong>For each</strong> <img class="math" src="_images/math/341e56b915d45373070e88f93f0c8559a7e30bbb.png" alt="k' \in \mathbf{I}(a,k)"/>:</div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li>Get linear inequality representations of <img class="math" src="_images/math/d978495b97a8dca982958145a0bd967b8071a038.png" alt="T \cap Q_{k'}"/> as</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/80a814f8f4d502b6817830cefdcf2ff16dc9d249.png" alt="(M_{k'}, d_{k'}) \gets xPolyLcons(a,k,k')"/></p>
+</div><ul class="simple">
+<li>Get current payoff profile <img class="math" src="_images/math/dcdeba92377b9df25431092d2b45d05dc1dd32e5.png" alt="v(a,b)"/></li>
+<li>Solve separable BLP</li>
+</ul>
+<div class="math">
+<p><img src="_images/math/285db5aeff78b8c2fb00958d01c7ce46c4d58314.png" alt="\check{\pi}(Q_k,a,b,k') &amp;
+= \min_{\lambda \in Q_k,w} \lambda [ (1-\delta)v(a,b) + \delta P w ]
+\\
+s.t. &amp;
+\\
+M_{k'} (\lambda P)^T &amp; \leq d_{k'}
+\\
+\lambda b^T &amp; \leq 0
+\\
+H w &amp; \leq c^{o}(Q_k', \cdot)
+\\
+\delta[p^j(a')-p^j(a_j)]\cdot w &amp; \leq (1-\delta) [\phi(a')-\phi(a_j)], \  \forall j \in \mathcal{Z}"/></p>
+</div></div></blockquote>
+</div></blockquote>
+</li>
+<li><p class="first">Get <img class="math" src="_images/math/0f87381b0d81068d524cc0c54628585a154d66af.png" alt="\check{\pi}(Q_k,a,b) = \min_{k' \in \mathbf{I}(a,k)} \check{\pi}(Q_k,a,b,k')"/>.</p>
+</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Get <img class="math" src="_images/math/0019f257e531549bfd8135b3b1ddfb50f0d4af5e.png" alt="\check{\pi}(Q_k)  = \max_{b \in B} \min_{a \in A}\check{\pi}(Q_k,a,b)"/>.</li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul>
+<li><p class="first">The <em>separable</em> constraint sets <img class="math" src="_images/math/eb6ad7ee6dd28fb77290d4a09b0604994fbc5bc8.png" alt="\mathcal{F}_1"/> and
+<img class="math" src="_images/math/87c66ccc5e08e95f7ac6a04f631b28217086f751.png" alt="\mathcal{F}_2"/> for <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> and <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/>, respectively,
+are given by constraints in the BLP. These constraint say the following.</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><img class="math" src="_images/math/eb6ad7ee6dd28fb77290d4a09b0604994fbc5bc8.png" alt="\mathcal{F}_1"/>: the first two constraints require <img class="math" src="_images/math/f0fc28cd7ecdb7688dd7856d680d2e51a9639744.png" alt="\lambda \in Q_k"/> to be such that</p>
+<blockquote>
+<div><ul class="simple">
+<li>for each <img class="math" src="_images/math/46cc3d87825a8f1e340cb2ed1c0e494a0ec9bbde.png" alt="a \in A, k \in \mathbf{K}"/> and <img class="math" src="_images/math/3db8dc62fb9e7be9a420011ea1ff9b6c3cddf6bf.png" alt="k' \in
+\mathbf{I}(a,k)"/>, the resulting continuation state <img class="math" src="_images/math/866e2f0cfbac63dfb8c4828fc8e13892b32ca3df.png" alt="\lambda P(a) \in Q_{k'} \cap P(Q_k)"/>; and</li>
+<li>given a fixed policy <img class="math" src="_images/math/5e87bf41a96deddf6cb485ff530f153f2590e9cc.png" alt="b"/>, the choice over <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/>
+renders <img class="math" src="_images/math/5e87bf41a96deddf6cb485ff530f153f2590e9cc.png" alt="b"/> feasible according the the government budget
+constraint;</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><img class="math" src="_images/math/87c66ccc5e08e95f7ac6a04f631b28217086f751.png" alt="\mathcal{F}_2"/> is given by the requirements that <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> be</p>
+<blockquote>
+<div><ul class="simple">
+<li>consistent with respect to the step correspondence slice
+<img class="math" src="_images/math/ec178a74b17ee9eb8104686db1d36b45d24ad8a4.png" alt="\mathcal{W}(k')"/> which has constant levels over the partition
+element <img class="math" src="_images/math/d76c941ce1cb2487be0df78a36540e6d3a47d347.png" alt="Q_{k'}"/>; and</li>
+<li>such that <img class="math" src="_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> is incentive compatible for all small
+agents.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Constructing the punishment values <img class="math" src="_images/math/ca42a6ca883de6c8f2c39e49eafc1e7af847b75e.png" alt="\hat{\pi}_k"/> for the <em>inner-approximation</em> scheme is similar to what we did above in detail for <img class="math" src="_images/math/2433943065046c5bb8ca0f8e04d4f7723f0b9fa9.png" alt="\check{\pi}_k"/>. The only differences are</p>
+</li>
+</ul>
+<blockquote class="last">
+<div><ol class="arabic">
+<li><p class="first">in the second last step of the pseudocode above, replace that line with:</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/c72d446dcf8129aea27bd3f8cfed9979b37b21df.png" alt="\hat{\pi}(Q_k,a,b) = \max_{k' \in \mathbf{I}(a,k)} \hat{\pi}(Q_k,a,b,k')."/></p>
+</div></div></blockquote>
+<p>Of course we should also re-label all the <img class="math" src="_images/math/08ecfd92114b8ced42e835a6723826d94e799b95.png" alt="\check{\pi}"/> notation for the punishment value function with <img class="math" src="_images/math/e73d6ea2617b4f843d7f6b3396eed0d064e4b2a6.png" alt="\hat{\pi}"/>; and</p>
+</li>
+<li><p class="first"><em>maximize</em> over <img class="math" src="_images/math/f0fc28cd7ecdb7688dd7856d680d2e51a9639744.png" alt="\lambda \in Q_k"/> in the main BLP problem.</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="topic">
+<p class="topic-title first">Relevant functions <img class="math" src="_images/math/4e489a9cc4107ff2504d2d9dcf056de96d93c33a.png" alt="\blacktriangleright"/></p>
+<dl class="function">
+<dt id="Punish_Outer">
+<code class="descname">Punish_Outer</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#Punish_Outer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+<ul>
+<li><p class="first"><em>pival</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <img class="math" src="_images/math/34626622a0ea7baf44f94ae525a635216c0d18e6.png" alt="(K \times 1)"/> numeric array containing elements
+<img class="math" src="_images/math/b6aa3d8ccbacc4dac45debe69689b0bd857941ec.png" alt="\check{\pi}(Q_k)"/> where <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><strong>PunishK</strong></p>
+</div>
+<dl class="function">
+<dt id="Punish_Inner">
+<code class="descname">Punish_Inner</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#Punish_Inner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+<ul>
+<li><p class="first"><em>pival</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>A <img class="math" src="_images/math/34626622a0ea7baf44f94ae525a635216c0d18e6.png" alt="(K \times 1)"/> numeric array containing elements
+<img class="math" src="_images/math/c5cab1143f504e8559dd852505d6defd030259e1.png" alt="\hat{\pi}(Q_k)"/> where <img class="math" src="_images/math/a079bd76f3b234a8983ca1550d994d76289ff50c.png" alt="k \in \mathbf{K}"/>.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><strong>PunishK</strong></p>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<table class="docutils citation" frame="void" id="cm2009" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[CM2009]</a></td><td>Carpara, Alberto and Michele Monaci. &#8220;Bidimensional packing by bilinear programming&#8221;. <em>Mathematical Programming Series A</em>, 118, 75–108.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="hpt2000" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[HPT2000]</a></td><td>Horst R, P. Pardalos and N. Thoai (2000): <em>Introduction to global optimization</em>. 2nd Edition, Boston: Springer, 2000.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ht1996" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[HT1996]</a></td><td>Horst R, Hoang Tuy (1996): <em>Global Optimization</em>. 3rd Edition, New York: Springer.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="man1995" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[Man1995]</a></td><td>Mangasarian, Olvi L. (1995): &#8220;The linear complementarity problem as a separable bilinear program&#8221;. <em>Journal of Global Optimization</em>, 12, 1–7.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9. Punishment values and BLPs</a><ul>
+<li><a class="reference internal" href="#implementing-punishment-values">9.1. Implementing punishment values</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="payoff_bilinear.html"
+                        title="previous chapter">8. Bilinear programs and SSE operator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="payoff_compute.html"
+                        title="next chapter">10. Computing approximate SSE payoffs</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="payoff_compute.html" title="10. Computing approximate SSE payoffs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="payoff_bilinear.html" title="8. Bilinear programs and SSE operator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

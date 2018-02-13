@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. State Space &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="2. Actions and Transitions" href="actions_transitions.html" />
+    <link rel="prev" title="Introduction" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="actions_transitions.html" title="2. Actions and Transitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="state-space">
+<h1>1. State Space<a class="headerlink" href="#state-space" title="Permalink to this headline">¶</a></h1>
+<p>Consider the <em>game state space</em> as <img class="math" src="_images/math/0567defe6435dc0a0283802f97e83114ee93afa2.png" alt="D := \Delta (\mathcal{Z})"/>, the set of
+all probability measures on the finite <em>individual state-space</em>
+<img class="math" src="_images/math/bf9ba342080887d7f0b8c517d7df44e7120b0102.png" alt="\mathcal{Z} := \{-N,...,-1,+1,...,+M\}"/>, where <img class="math" src="_images/math/26720ec99533e6d5cbe053cb299effe7d68b478d.png" alt="0&lt;N,M &lt;+\infty"/>.
+Let <img class="math" src="_images/math/e2c254e9bf8867e95acbe04ffcf6e0dfc4df0900.png" alt="N_{z}:=M+N \equiv |\mathcal{Z}|"/>.</p>
+<div class="section" id="properties">
+<h2>1.1. Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<p>The set <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> is:</p>
+<ol class="arabic simple">
+<li>is a unit simplex embedded in <img class="math" src="_images/math/bf6de096ab62768da1475bbc853d802d4599b5d5.png" alt="\mathbb{R}^{N_{z}}"/>:</li>
+</ol>
+<div class="math">
+<p><img src="_images/math/78b9a65ebf752b2041242a3b6d84c77e84cecf7d.png" alt="\begin{equation*}
+     \Delta (\mathcal{Z}) := \left\{ \lambda \in \mathbb{R}^{N_{z}}:
+        \lambda_{i} \in [0,1], \forall i = 1,...,N_{z},
+        \text{ and }
+        \sum_{i=1}^{N_{z}} \lambda_{i} = 1
+     \right\}
+\end{equation*}"/></p>
+</div><ol class="arabic simple">
+<li>represented by a convex polytope (i.e. a unit <img class="math" src="_images/math/bf44af9b73e4190e8c7cdeb52d0e1a2e254d9239.png" alt="N_{z}"/>-simplex);</li>
+<li>partitioned into <img class="math" src="_images/math/aab0e84b5fa1444b80f156fb29fe4e97e5615b9f.png" alt="K &lt; +\infty"/> equal-area <img class="math" src="_images/math/430f5410f480325e3155a70abded3f6f0cc33956.png" alt="(N_{z}-1)"/>-simplices, <img class="math" src="_images/math/199865b62d515c61446962319abf5cf0d690f5d6.png" alt="Q_{k}, k \in \{ 1,...,K \} =: \mathbf{K}"/>.</li>
+</ol>
+<div class="topic">
+<p class="topic-title first">Relevant functions <img class="math" src="_images/math/4e489a9cc4107ff2504d2d9dcf056de96d93c33a.png" alt="\blacktriangleright"/></p>
+<dl class="function">
+<dt id="simplex_tripart">
+<code class="descname">simplex_tripart</code><span class="sig-paren">(</span><em>K</em><span class="sig-paren">)</span><a class="headerlink" href="#simplex_tripart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <img class="math" src="_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> number of equal volume simplex partition elements of unit simplex <img class="math" src="_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>, given by <img class="math" src="_images/math/1790d60a0fae3983f98d9beaf080550bfe15e8e5.png" alt="Q_{k}, k = 1,...,K"/>.</p>
+</dd></dl>
+
+</div>
+<p>The next figure&#8211;<a class="reference internal" href="#figure-partition"><em>Example state-space partition scheme </em></a>&#8211;shows an example where <img class="math" src="_images/math/f8246651d202a2fcef1591d9b3f8b1862a4d0e01.png" alt="K = 16"/> and <img class="math" src="_images/math/8b3a40165bf06c4be8baaea9ac82fb322736f535.png" alt="N_z = 3"/>.</p>
+<div class="align-center figure" id="id1">
+<span id="figure-partition"></span><a class="reference internal image-reference" href="_images/partition.png"><img alt="Partition Elements of D" src="_images/partition.png" style="width: 90%;" /></a>
+<p class="caption"><span class="caption-text">Example state-space partition scheme <img class="math" src="_images/math/6d4e98fd952ab66273918308f600873e8e5759e3.png" alt="(N_z = 3, K = 16)"/></span></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. State Space</a><ul>
+<li><a class="reference internal" href="#properties">1.1. Properties</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions_transitions.html"
+                        title="next chapter">2. Actions and Transitions</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="actions_transitions.html" title="2. Actions and Transitions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>

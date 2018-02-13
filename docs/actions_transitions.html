@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Actions and Transitions &mdash; HARDPIG 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo.ico"/>
+    <link rel="top" title="HARDPIG 1.0a documentation" href="index.html" />
+    <link rel="next" title="3. Intersections with State-space Partitions" href="intersections.html" />
+    <link rel="prev" title="1. State Space" href="statespace.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intersections.html" title="3. Intersections with State-space Partitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="statespace.html" title="1. State Space"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="actions-and-transitions">
+<h1>2. Actions and Transitions<a class="headerlink" href="#actions-and-transitions" title="Permalink to this headline">¶</a></h1>
+<p>Let <img class="math" src="_images/math/65d6c3537949d11a05aa66d809b441d999642d42.png" alt="\tilde{A} \ni a_{j}"/> denote the finite action set of each individual (small)
+player <img class="math" src="_images/math/5c3b5e60b4e3aa8cc0f6c99d354a867530fdf971.png" alt="j \in \mathcal{Z}"/>. Then <img class="math" src="_images/math/f92175c1f5f0df77ca14b28639ed2b04704253fe.png" alt="A := \tilde{A}^{\mathcal{Z}} \ni a"/>, denotes the
+<img class="math" src="_images/math/bf44af9b73e4190e8c7cdeb52d0e1a2e254d9239.png" alt="N_{z}"/>-copies of an individual&#8217;s action space&#8212;i.e. the set of action
+profiles <img class="math" src="_images/math/7dd2a5ea01fbd72ad2a58dd1f3d6ecbfde6208a1.png" alt="a"/>. The finite  set <img class="math" src="_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/> has <img class="math" src="_images/math/74fbbe8b11f563af8d5601dbcfbb98c1be12978f.png" alt="N_{a} := |A|"/> number of
+action profiles.</p>
+<p>For each action profile <img class="math" src="_images/math/ee817a52ab06982a26bd5eeef7eb7b3b43c9c6e8.png" alt="a \in A"/>, its associated Markov transition
+probability function is a linear operator <img class="math" src="_images/math/c4fb7b1527e36c2344ec807e567d5d47dc9e79f1.png" alt="P(a): D \rightarrow D"/>.</p>
+<div class="topic">
+<p class="topic-title first">Relevant functions <img class="math" src="_images/math/4e489a9cc4107ff2504d2d9dcf056de96d93c33a.png" alt="\blacktriangleright"/></p>
+<dl class="function">
+<dt id="A_ProfileSet">
+<code class="descname">A_ProfileSet</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#A_ProfileSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the finite set <img class="math" src="_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/> of <img class="math" src="_images/math/30b6683a0e19ac4958fcd91bdd05cb443bc3e080.png" alt="N_{a}"/> action profiles
+of individual small players. A numeric array of size <img class="math" src="_images/math/37b45152c3249eee6b4a4d3c604cdd5cf443d42f.png" alt="N_{a} \times N_{z}"/>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="TransProbA">
+<code class="descname">TransProbA</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#TransProbA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the finite set of Markov maps <img class="math" src="_images/math/c4fb7b1527e36c2344ec807e567d5d47dc9e79f1.png" alt="P(a): D \rightarrow D"/>, one
+for every <img class="math" src="_images/math/ee817a52ab06982a26bd5eeef7eb7b3b43c9c6e8.png" alt="a \in A"/>. A numeric array of size <img class="math" src="_images/math/0bae45e18304bd85af64c7855dbaf4d29e9056bd.png" alt="N_{z} \times
+N_{z} \times N_{a}"/>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="statespace.html"
+                        title="previous chapter">1. State Space</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intersections.html"
+                        title="next chapter">3. Intersections with State-space Partitions</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intersections.html" title="3. Intersections with State-space Partitions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="statespace.html" title="1. State Space"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">HARDPIG 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013, T. Kam and R. Stauber.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.
+    </div>
+  </body>
+</html>
